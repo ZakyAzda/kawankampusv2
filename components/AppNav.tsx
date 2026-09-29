@@ -9,8 +9,8 @@ import {
   CalendarRange, 
   User, 
   Radar, 
-  Bell 
 } from "lucide-react";
+import NotificationBell from "@/components/NotificationBell";
 
 interface NavMenuItem {
   label: string;
@@ -109,13 +109,7 @@ export default function AppNav() {
 
           {/* Desktop Right Actions: Notifications & Tambah Jadwal CTA */}
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              aria-label="Pemberitahuan radar"
-              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-secondary hover:text-on-surface hover:bg-surface-container transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              <Bell className="w-5 h-5" />
-            </button>
+            <NotificationBell />
 
             <Link
               href="/schedule/new"
