@@ -1,588 +1,379 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { useScheduleStore } from "@/store/useScheduleStore";
-import { ConflictPair, ScheduleItem } from "@/data/schedules";
+import {
+  ChevronLeft,
+  ChevronRight,
+  School,
+  Users,
+  AlertTriangle,
+  Plus,
+  Radar,
+  Calendar as CalendarIcon,
+  Flame,
+  ArrowRight,
+  ShieldCheck,
+} from "lucide-react";
+import ScheduleCard from "@/components/schedule/ScheduleCard";
+import CategoryChip from "@/components/ui/CategoryChip";
+import { Schedule, Conflict, ConflictStats } from "@/types/schedule";
 
-const DAY_ORDER = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"];
-const DAY_LABEL: Record<string, string> = {
-  senin: "Senin",
-  selasa: "Selasa",
-  rabu: "Rabu",
-  kamis: "Kamis",
-  jumat: "Jumat",
-  sabtu: "Sabtu",
-  minggu: "Minggu",
-};
-const CATEGORY_COLOR: Record<string, string> = {
-  kuliah: "#1A56DB",
-  organisasi: "#7C3AED",
-  lainnya: "#059669",
-};
-const CATEGORY_BG: Record<string, string> = {
-  kuliah: "#EBF0FD",
-  organisasi: "#EDE9FE",
-  lainnya: "#D1FAE5",
-};
-const SEVERITY_COLOR: Record<string, string> = {
-  tinggi: "#EF4444",
-  sedang: "#F59E0B",
-  rendah: "#6B7280",
-};
-const SEVERITY_BG: Record<string, string> = {
-  tinggi: "#FEE2E2",
-  sedang: "#FEF3C7",
-  rendah: "#F3F4F6",
-};
+// 7 Days of the week in Indonesian
+const DAYS_ORDER = [
+  { key: "senin", short: "Sen", full: "Senin" },
+  { key: "selasa", short: "Sel", full: "Selasa" },
+  { key: "rabu", short: "Rab", full: "Rabu" },
+  { key: "kamis", short: "Kam", full: "Kamis" },
+  { key: "jumat", short: "Jum", full: "Jumat" },
+  { key: "sabtu", short: "Sab", full: "Sabtu" },
+  { key: "minggu", short: "Min", full: "Minggu" },
+];
 
-function timeToMinutes(t: string) {
+function timeToMinutes(t: string): number {
+  if (!t || !t.includes(":")) return 0;
   const [h, m] = t.split(":").map(Number);
-  return h * 60 + m;
+  return (h || 0) * 60 + (m || 0);
 }
 
 export default function CalendarPage() {
-  const { schedules, conflicts, deleteSchedule } = useScheduleStore();
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [conflicts, setConflicts] = useState<Conflict[]>([]);
+  const [stats, setStats] = useState<ConflictStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Filter & Day selections
   const [selectedDay, setSelectedDay] = useState("kamis");
-  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [activeCategory, setActiveCategory] = useState<string>("semua");
 
-  const daySchedules = useMemo(() => {
-    return schedules
-      .filter((s) => s.day === selectedDay)
-      .filter((s) => (categoryFilter === "all" ? true : s.category === categoryFilter))
-      .sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
-  }, [schedules, selectedDay, categoryFilter]);
+  // Load real data from DB
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const [schedRes, confRes] = await Promise.all([
+        fetch("/api/schedules", { cache: "no-store" }),
+        fetch("/api/conflicts", { cache: "no-store" }),
+      ]);
 
-  const dayConflicts = useMemo(
-    () => conflicts.filter((c) => c.day === selectedDay),
-    [conflicts, selectedDay]
-  );
+      if (schedRes.ok) {
+        const schedData = await schedRes.json();
+        setSchedules(schedData.schedules || []);
+      }
+      if (confRes.ok) {
+        const confData = await confRes.json();
+        setConflicts(confData.conflicts || []);
+        setStats(confData.stats || null);
+      }
+    } catch (err) {
+      console.error("Calendar Load Error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const conflictsByDay = useMemo(() => {
-    const map: Record<string, number> = {};
-    conflicts.forEach((c) => {
-      map[c.day] = (map[c.day] || 0) + 1;
-    });
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  // Map of clashing schedule ID -> conflict ID
+  const clashingScheduleMap = useMemo(() => {
+    const map = new Map<string, string>();
+    conflicts
+      .filter((c) => c.status === "unresolved")
+      .forEach((c) => {
+        if (c.scheduleAId) map.set(c.scheduleAId, c.id);
+        if (c.scheduleBId) map.set(c.scheduleBId, c.id);
+      });
     return map;
   }, [conflicts]);
 
-  const scheduleCountByDay = useMemo(() => {
-    const map: Record<string, number> = {};
-    schedules.forEach((s) => {
-      map[s.day] = (map[s.day] || 0) + 1;
-    });
-    return map;
-  }, [schedules]);
+  // Set of days that have unresolved conflicts
+  const daysWithConflicts = useMemo(() => {
+    const set = new Set<string>();
+    conflicts
+      .filter((c) => c.status === "unresolved")
+      .forEach((c) => {
+        if (c.day) set.add(c.day.toLowerCase());
+      });
+    return set;
+  }, [conflicts]);
+
+  // Filter schedules by selected day
+  const daySchedules = useMemo(() => {
+    return schedules
+      .filter((s) => s.day?.toLowerCase() === selectedDay.toLowerCase())
+      .sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+  }, [schedules, selectedDay]);
+
+  // Conflicts on the selected day
+  const dayConflicts = useMemo(() => {
+    return conflicts.filter(
+      (c) => c.day?.toLowerCase() === selectedDay.toLowerCase() && c.status === "unresolved"
+    );
+  }, [conflicts, selectedDay]);
+
+  // Filtered by category
+  const filteredDaySchedules = useMemo(() => {
+    if (activeCategory === "semua") return daySchedules;
+    if (activeCategory === "conflict") {
+      return daySchedules.filter((s) => clashingScheduleMap.has(s.id));
+    }
+    return daySchedules.filter(
+      (s) => s.category?.toLowerCase() === activeCategory.toLowerCase()
+    );
+  }, [daySchedules, activeCategory, clashingScheduleMap]);
+
+  // Category counts
+  const categoryCounts = useMemo(() => {
+    return {
+      semua: daySchedules.length,
+      kuliah: daySchedules.filter((s) => s.category?.toLowerCase() === "kuliah").length,
+      organisasi: daySchedules.filter((s) => s.category?.toLowerCase() === "organisasi").length,
+      conflict: daySchedules.filter((s) => clashingScheduleMap.has(s.id)).length,
+    };
+  }, [daySchedules, clashingScheduleMap]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      {/* 7-Day Desktop Selector */}
-      <div
-        style={{
-          background: "#FFFFFF",
-          borderRadius: 16,
-          padding: "16px",
-          border: "1px solid #E5E7EB",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(7, 1fr)",
-            gap: 10,
-          }}
-        >
-          {DAY_ORDER.map((day) => {
-            const active = selectedDay === day;
-            const conflictCount = conflictsByDay[day] || 0;
-            const schedCount = scheduleCountByDay[day] || 0;
+    <div className="flex flex-col gap-6 w-full">
+      {/* ====================================================================
+          1. Month Selector & Sub-Header
+          ==================================================================== */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <h1 className="font-sans font-bold text-[20px] md:text-[24px] text-on-surface tracking-tight">
+            Kalender & Agenda
+          </h1>
+          <span className="px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary font-mono text-[11px] font-semibold">
+            Semester Aktif
+          </span>
+        </div>
 
-            return (
-              <button
-                key={day}
-                onClick={() => setSelectedDay(day)}
-                style={{
-                  background: active ? "#1A56DB" : "#F9FAFB",
-                  color: active ? "#FFFFFF" : "#1F2937",
-                  border: active ? "1.5px solid #1A56DB" : "1px solid #E5E7EB",
-                  borderRadius: 12,
-                  padding: "14px 10px",
-                  cursor: "pointer",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 6,
-                  transition: "all 0.15s ease",
-                  boxShadow: active ? "0 4px 12px rgba(26, 86, 219, 0.25)" : "none",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    letterSpacing: 0.2,
-                  }}
-                >
-                  {DAY_LABEL[day]}
-                </span>
-                <span
-                  style={{
-                    fontSize: 11,
-                    color: active ? "rgba(255, 255, 255, 0.8)" : "#6B7280",
-                    fontWeight: 500,
-                  }}
-                >
-                  {schedCount} Jadwal
-                </span>
-
-                {conflictCount > 0 && (
-                  <span
-                    style={{
-                      marginTop: 2,
-                      fontSize: 10,
-                      fontWeight: 700,
-                      background: active ? "#FEE2E2" : "#EF4444",
-                      color: active ? "#DC2626" : "#FFFFFF",
-                      padding: "2px 8px",
-                      borderRadius: 10,
-                    }}
-                  >
-                    {conflictCount} bentrok
-                  </span>
-                )}
-              </button>
-            );
-          })}
+        <div className="flex items-center gap-1.5">
+          <Link
+            href="/schedule/new"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary text-on-primary text-[13px] font-semibold hover:bg-primary-container transition-all shadow-sm"
+          >
+            <Plus className="w-4 h-4" />
+            <span className="hidden sm:inline">Tambah Agenda</span>
+          </Link>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        {/* Controls Bar: Category Filters & Add Button */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 12,
-          }}
-        >
-          {/* Category Filter Pills */}
-          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <span style={{ fontSize: 13, color: "#6B7280", fontWeight: 600, marginRight: 4 }}>
-              Filter:
-            </span>
-            {[
-              { id: "all", label: "Semua Kategori" },
-              { id: "kuliah", label: "Mata Kuliah" },
-              { id: "organisasi", label: "Organisasi" },
-              { id: "lainnya", label: "Lainnya" },
-            ].map((cat) => {
-              const active = categoryFilter === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setCategoryFilter(cat.id)}
-                  style={{
-                    padding: "7px 14px",
-                    borderRadius: 20,
-                    fontSize: 12,
-                    fontWeight: active ? 700 : 500,
-                    background: active ? "#1A56DB" : "#FFFFFF",
-                    color: active ? "#FFFFFF" : "#4B5563",
-                    border: active ? "1px solid #1A56DB" : "1px solid #E5E7EB",
-                    cursor: "pointer",
-                    transition: "all 0.15s ease",
-                  }}
-                >
-                  {cat.label}
-                </button>
-              );
-            })}
-          </div>
+      {/* ====================================================================
+          2. Horizontal Date Strip (Senin - Minggu)
+          ==================================================================== */}
+      <div className="bg-surface-container-lowest p-3 rounded-2xl border border-surface-variant/80 shadow-sm flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
+        {DAYS_ORDER.map((day) => {
+          const isSelected = selectedDay.toLowerCase() === day.key;
+          const hasConflict = daysWithConflicts.has(day.key);
+          const countOnDay = schedules.filter((s) => s.day?.toLowerCase() === day.key).length;
 
-          {/* Quick Add for current selected day */}
-          <Link
-            href={`/add`}
-            style={{
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              background: "#FFFFFF",
-              border: "1px solid #1A56DB",
-              color: "#1A56DB",
-              padding: "7px 16px",
-              borderRadius: 8,
-              fontSize: 12,
-              fontWeight: 700,
-            }}
-          >
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-              <path d="M12 5v14M5 12h14" strokeLinecap="round" />
-            </svg>
-            Tambah Jadwal Baru
-          </Link>
-        </div>
-
-        {/* Conflict Alert Banner for selected day if any */}
-        {dayConflicts.length > 0 && (
-          <div
-            style={{
-              background: "#FEF2F2",
-              border: "1.5px solid #FCA5A5",
-              borderRadius: 14,
-              padding: "18px 20px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 8,
-                  background: "#EF4444",
-                  color: "#FFFFFF",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}
-              >
-                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-                </svg>
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#991B1B" }}>
-                  Terdeteksi {dayConflicts.length} Bentrokan di Hari {DAY_LABEL[selectedDay]}!
-                </div>
-                <div style={{ fontSize: 12, color: "#B91C1C", marginTop: 2 }}>
-                  Silakan tinjau jadwal yang bertabrakan di bawah ini untuk menghindari ketidakhadiran kuliah atau rapat.
-                </div>
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                gap: 12,
-              }}
+          return (
+            <button
+              key={day.key}
+              type="button"
+              onClick={() => setSelectedDay(day.key)}
+              aria-pressed={isSelected}
+              className={`flex-1 min-w-[50px] py-2.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 relative select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                isSelected
+                  ? "bg-primary text-on-primary shadow-md scale-105"
+                  : "bg-surface-container-low hover:bg-surface-container text-on-surface"
+              }`}
             >
-              {dayConflicts.map((c) => (
-                <div
-                  key={c.id}
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1px solid #FECACA",
-                    borderRadius: 10,
-                    padding: "12px 16px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 12,
-                  }}
-                >
-                  <div>
-                    <span
-                      style={{
-                        fontSize: 10,
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        color: SEVERITY_COLOR[c.severity],
-                        background: SEVERITY_BG[c.severity],
-                        padding: "2px 6px",
-                        borderRadius: 4,
-                      }}
-                    >
-                      Tingkat {c.severity}
-                    </span>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: "#111827", marginTop: 4 }}>
-                      {c.scheduleA.name} ✕ {c.scheduleB.name}
-                    </div>
-                    <div style={{ fontSize: 11, color: "#6B7280", marginTop: 2 }}>
-                      Waktu Tabrakan: {c.overlapStart} – {c.overlapEnd} WIB
-                    </div>
-                  </div>
+              <span className={`font-mono text-[12px] ${isSelected ? "text-primary-fixed" : "text-secondary"}`}>
+                {day.short}
+              </span>
+              <span className="font-sans font-bold text-[15px] mt-0.5">
+                {countOnDay}
+              </span>
+              {/* Conflict indicator dots */}
+              <div className="h-1.5 flex items-center gap-0.5 mt-1">
+                {hasConflict && (
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      isSelected ? "bg-tertiary-fixed animate-pulse" : "bg-tertiary animate-pulse"
+                    }`}
+                  />
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
 
-                  <Link
-                    href={`/conflict/${c.id}`}
-                    style={{
-                      textDecoration: "none",
-                      fontSize: 12,
-                      fontWeight: 700,
-                      background: "#1A56DB",
-                      color: "#FFFFFF",
-                      padding: "6px 12px",
-                      borderRadius: 6,
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    Atasi Bentrokan
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
+      {/* ====================================================================
+          3. Category Filter Chips
+          ==================================================================== */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+        <CategoryChip
+          label="Semua"
+          count={categoryCounts.semua}
+          active={activeCategory === "semua"}
+          onClick={() => setActiveCategory("semua")}
+        />
+        <CategoryChip
+          label="Kuliah"
+          icon={School}
+          variant="kuliah"
+          count={categoryCounts.kuliah}
+          active={activeCategory === "kuliah"}
+          onClick={() => setActiveCategory("kuliah")}
+        />
+        <CategoryChip
+          label="Organisasi"
+          icon={Users}
+          variant="organisasi"
+          count={categoryCounts.organisasi}
+          active={activeCategory === "organisasi"}
+          onClick={() => setActiveCategory("organisasi")}
+        />
+        {categoryCounts.conflict > 0 && (
+          <CategoryChip
+            label="Bentrok"
+            icon={AlertTriangle}
+            variant="conflict"
+            count={categoryCounts.conflict}
+            active={activeCategory === "conflict"}
+            onClick={() => setActiveCategory("conflict")}
+          />
         )}
+      </div>
 
-        {/* Schedule List for Selected Day */}
-        <div
-          style={{
-            background: "#FFFFFF",
-            borderRadius: 16,
-            border: "1px solid #E5E7EB",
-            padding: "24px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 20,
-              borderBottom: "1px solid #F3F4F6",
-              paddingBottom: 14,
-            }}
-          >
-            <div>
-              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#111827" }}>
-                Agenda {DAY_LABEL[selectedDay]}
-              </h2>
-              <p style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>
-                {daySchedules.length} kegiatan terdaftar
-              </p>
-            </div>
+      {/* ====================================================================
+          4. Desktop 2-Column Split: Schedules on Left, Conflict Radar on Right
+          ==================================================================== */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Column: Schedules for Selected Day */}
+        <div className="lg:col-span-8 flex flex-col gap-4">
+          {/* Day header banner */}
+          <div className="flex items-center justify-between">
+            <h2 className="font-sans font-bold text-[18px] text-on-surface">
+              Jadwal Hari {DAYS_ORDER.find((d) => d.key === selectedDay)?.full}
+            </h2>
+            <span className="font-mono text-[13px] text-secondary">
+              {filteredDaySchedules.length} Agenda Terdaftar
+            </span>
           </div>
 
-          {daySchedules.length === 0 ? (
-            <div
-              style={{
-                padding: "48px 24px",
-                textAlign: "center",
-                background: "#F9FAFB",
-                borderRadius: 12,
-                border: "1px dashed #D1D5DB",
-              }}
-            >
-              <div style={{ fontSize: 15, fontWeight: 700, color: "#4B5563" }}>
-                Tidak ada kegiatan untuk hari {DAY_LABEL[selectedDay]}
+          {loading ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-28 rounded-2xl bg-surface-container-low animate-pulse border border-surface-variant/40"
+              />
+            ))
+          ) : filteredDaySchedules.length === 0 ? (
+            <div className="bg-surface-container-lowest rounded-2xl p-8 border border-surface-variant/70 text-center flex flex-col items-center justify-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-surface-container-low text-primary flex items-center justify-center">
+                <CalendarIcon className="w-6 h-6" />
               </div>
-              <p style={{ fontSize: 13, color: "#9CA3AF", marginTop: 4 }}>
-                {categoryFilter !== "all"
-                  ? "Coba ubah filter kategori atau tambahkan jadwal baru."
-                  : "Hari ini bebas agenda perkuliahan dan kegiatan."}
-              </p>
+              <div className="flex flex-col">
+                <h3 className="font-sans font-bold text-[15px] text-on-surface">
+                  Tidak ada agenda pada hari ini
+                </h3>
+                <p className="font-sans text-[13px] text-secondary mt-0.5">
+                  Tambahkan jadwal kuliah atau kegiatan organisasi untuk hari ini.
+                </p>
+              </div>
               <Link
-                href="/add"
-                style={{
-                  display: "inline-block",
-                  marginTop: 16,
-                  textDecoration: "none",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  background: "#1A56DB",
-                  color: "#FFFFFF",
-                  padding: "8px 18px",
-                  borderRadius: 8,
-                }}
+                href="/schedule/new"
+                className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-on-primary text-[13px] font-semibold"
               >
-                + Tambah Jadwal {DAY_LABEL[selectedDay]}
+                <Plus className="w-4 h-4" />
+                <span>Tambah Jadwal</span>
               </Link>
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              {daySchedules.map((item) => {
-                const isConflict = conflicts.some(
-                  (c) =>
-                    (c.scheduleA.id === item.id || c.scheduleB.id === item.id) &&
-                    c.day === selectedDay
-                );
+            filteredDaySchedules.map((schedule) => (
+              <ScheduleCard
+                key={schedule.id}
+                schedule={schedule}
+                isColliding={clashingScheduleMap.has(schedule.id)}
+                conflictId={clashingScheduleMap.get(schedule.id)}
+              />
+            ))
+          )}
+        </div>
 
-                return (
-                  <div
-                    key={item.id}
-                    style={{
-                      background: "#FFFFFF",
-                      borderRadius: 12,
-                      border: isConflict ? "1.5px solid #FECACA" : "1px solid #E5E7EB",
-                      padding: "16px 20px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: 20,
-                      boxShadow: "0 1px 2px rgba(0,0,0,0.02)",
-                    }}
-                  >
-                    {/* Time block */}
-                    <div style={{ textAlign: "center", minWidth: 90 }}>
-                      <div style={{ fontSize: 16, fontWeight: 800, color: "#111827" }}>
-                        {item.startTime}
-                      </div>
-                      <div style={{ fontSize: 12, color: "#9CA3AF" }}>
-                        s/d {item.endTime}
-                      </div>
-                    </div>
-
-                    {/* Separator Accent */}
-                    <div
-                      style={{
-                        width: 4,
-                        height: 52,
-                        borderRadius: 2,
-                        background: CATEGORY_COLOR[item.category],
-                        flexShrink: 0,
-                      }}
-                    />
-
-                    {/* Info */}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                        <span
-                          style={{
-                            fontSize: 11,
-                            fontWeight: 700,
-                            textTransform: "uppercase",
-                            letterSpacing: 0.4,
-                            padding: "2px 8px",
-                            borderRadius: 20,
-                            background: CATEGORY_BG[item.category],
-                            color: CATEGORY_COLOR[item.category],
-                          }}
-                        >
-                          {item.category}
-                        </span>
-
-                        {item.priority === "wajib" && (
-                          <span
-                            style={{
-                              fontSize: 10,
-                              fontWeight: 700,
-                              color: "#DC2626",
-                              background: "#FEE2E2",
-                              padding: "2px 8px",
-                              borderRadius: 4,
-                            }}
-                          >
-                            Prioritas Wajib
-                          </span>
-                        )}
-
-                        {item.isRoutine && (
-                          <span
-                            style={{
-                              fontSize: 10,
-                              fontWeight: 600,
-                              color: "#4B5563",
-                              background: "#F3F4F6",
-                              padding: "2px 6px",
-                              borderRadius: 4,
-                            }}
-                          >
-                            Rutin Mingguan
-                          </span>
-                        )}
-                      </div>
-
-                      <div style={{ fontSize: 16, fontWeight: 700, color: "#111827" }}>
-                        {item.name}
-                      </div>
-
-                      <div
-                        style={{
-                          fontSize: 13,
-                          color: "#6B7280",
-                          marginTop: 4,
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 16,
-                          flexWrap: "wrap",
-                        }}
-                      >
-                        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
-                          {item.location}
-                        </span>
-
-                        {item.lecturer && (
-                          <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <circle cx="12" cy="7" r="4" />
-                              <path d="M5.5 21a6.5 6.5 0 0113 0" />
-                            </svg>
-                            {item.lecturer}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Actions & Status */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      {isConflict && (
-                        <span
-                          style={{
-                            fontSize: 11,
-                            fontWeight: 700,
-                            color: "#DC2626",
-                            background: "#FEE2E2",
-                            padding: "6px 12px",
-                            borderRadius: 20,
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                          }}
-                        >
-                          <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-                          </svg>
-                          Bentrok Terdeteksi
-                        </span>
-                      )}
-
-                      <button
-                        onClick={() => {
-                          if (confirm(`Hapus jadwal "${item.name}"?`)) {
-                            deleteSchedule(item.id);
-                          }
-                        }}
-                        style={{
-                          background: "#F9FAFB",
-                          border: "1px solid #E5E7EB",
-                          borderRadius: 8,
-                          padding: "8px 12px",
-                          color: "#6B7280",
-                          fontSize: 12,
-                          cursor: "pointer",
-                          fontWeight: 600,
-                          transition: "all 0.15s ease",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.color = "#DC2626";
-                          e.currentTarget.style.borderColor = "#FCA5A5";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.color = "#6B7280";
-                          e.currentTarget.style.borderColor = "#E5E7EB";
-                        }}
-                      >
-                        Hapus
-                      </button>
-                    </div>
+        {/* Right Column: Conflict Radar & Overlap Summary for Selected Day */}
+        <div className="lg:col-span-4 flex flex-col gap-5 lg:sticky lg:top-24">
+          {dayConflicts.length > 0 ? (
+            <div className="bg-tertiary-fixed rounded-2xl p-5 border border-tertiary-container/30 shadow-sm flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-tertiary-container text-on-tertiary flex items-center justify-center shadow-sm">
+                    <Flame className="w-4 h-4" />
                   </div>
-                );
-              })}
+                  <h3 className="font-sans font-bold text-[15px] text-on-tertiary-fixed">
+                    {dayConflicts.length} Konflik Terdeteksi
+                  </h3>
+                </div>
+                <span className="px-2 py-0.5 rounded-full bg-tertiary text-on-tertiary text-[11px] font-bold">
+                  Kritis
+                </span>
+              </div>
+
+              <p className="font-sans text-[13px] text-on-tertiary-fixed-variant leading-relaxed">
+                Terdapat tumpang tindih waktu kegiatan pada hari{" "}
+                <strong>{DAYS_ORDER.find((d) => d.key === selectedDay)?.full}</strong>.
+              </p>
+
+              {/* Conflict items list */}
+              <div className="flex flex-col gap-2.5">
+                {dayConflicts.map((c) => (
+                  <div
+                    key={c.id}
+                    className="p-3.5 rounded-xl bg-surface-container-lowest/90 backdrop-blur-sm border border-tertiary/20 flex flex-col gap-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[12px] font-bold text-tertiary">
+                        Irisan {c.overlapStart} – {c.overlapEnd}
+                      </span>
+                      <span className="font-mono text-[11px] font-semibold text-secondary">
+                        {c.overlapMinutes} Menit
+                      </span>
+                    </div>
+
+                    <div className="text-[13px] font-semibold text-on-surface">
+                      {c.scheduleA?.name} <span className="text-tertiary">✕</span> {c.scheduleB?.name}
+                    </div>
+
+                    <Link
+                      href={`/conflict/${c.id}`}
+                      className="inline-flex items-center gap-1 text-[12px] font-bold text-tertiary hover:underline mt-1"
+                    >
+                      <span>Buka Resolusi Konflik</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="bg-surface-container-lowest rounded-2xl p-5 border border-surface-variant/80 shadow-sm flex flex-col gap-3">
+              <div className="flex items-center gap-2.5 text-emerald-700">
+                <ShieldCheck className="w-5 h-5" />
+                <h3 className="font-sans font-bold text-[15px] text-on-surface">
+                  Hari Ini Aman
+                </h3>
+              </div>
+              <p className="font-sans text-[13px] text-secondary leading-relaxed">
+                Tidak ada tabrakan waktu yang terdeteksi pada hari{" "}
+                <strong>{DAYS_ORDER.find((d) => d.key === selectedDay)?.full}</strong>. Semua agenda tersusun rapi.
+              </p>
             </div>
           )}
+
+          {/* Quick Academic Info Card */}
+          <div className="bg-surface-container-low rounded-2xl p-5 border border-surface-variant/70 flex flex-col gap-2">
+            <span className="font-sans font-bold text-[13px] text-primary flex items-center gap-1.5">
+              <Radar className="w-4 h-4" />
+              Sinkronisasi Radar Aktif
+            </span>
+            <p className="font-sans text-[12px] text-secondary leading-relaxed">
+              Jadwal yang kamu inputkan otomatis dipindai terhadap jadwal kuliah resmi dan rapat organisasi.
+            </p>
+          </div>
         </div>
       </div>
     </div>
