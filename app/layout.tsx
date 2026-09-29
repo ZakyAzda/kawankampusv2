@@ -3,7 +3,7 @@ import "./globals.css";
 import ServiceWorkerRegister from "@/components/pwa/ServiceWorkerRegister";
 
 export const viewport: Viewport = {
-  themeColor: "#004ac6",
+  themeColor: "#faf8ff",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
         />
       </head>
-      <body className="min-h-dvh" style={{ background: "var(--surface)" }}>
+      <body className="min-h-dvh bg-surface text-on-surface font-sans antialiased">
         <ServiceWorkerRegister />
         {children}
       </body>
