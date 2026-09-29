@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma, withRetry } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
 import { timeToMinutes, validateScheduleTime } from "@/lib/collisionEngine";
 
@@ -53,10 +53,12 @@ export async function GET(req: Request) {
       whereClause.category = category.toLowerCase();
     }
 
-    const schedules = await prisma.schedule.findMany({
-      where: whereClause,
-      orderBy: { startTime: "asc" },
-    });
+    const schedules = await withRetry(() =>
+      prisma.schedule.findMany({
+        where: whereClause,
+        orderBy: { startTime: "asc" },
+      })
+    );
 
     return NextResponse.json({ schedules });
   } catch (error: any) {

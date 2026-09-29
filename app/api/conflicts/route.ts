@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma, withRetry } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
 
 export async function GET() {
@@ -9,14 +9,16 @@ export async function GET() {
       return NextResponse.json({ error: "Belum terautentikasi" }, { status: 401 });
     }
 
-    const conflicts = await prisma.conflict.findMany({
-      where: { userId: session.userId },
-      include: {
-        scheduleA: true,
-        scheduleB: true,
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    const conflicts = await withRetry(() =>
+      prisma.conflict.findMany({
+        where: { userId: session.userId },
+        include: {
+          scheduleA: true,
+          scheduleB: true,
+        },
+        orderBy: { createdAt: "desc" },
+      })
+    );
 
     const unresolvedCount = conflicts.filter((c: { status: string }) => c.status === "unresolved").length;
     const resolvedCount = conflicts.filter((c: { status: string }) => c.status === "resolved").length;
