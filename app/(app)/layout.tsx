@@ -1,43 +1,16 @@
 import React from "react";
-import Sidebar from "@/components/Sidebar";
-import TopBar from "@/components/TopBar";
+import AppNav from "@/components/AppNav";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        background: "#F3F4F6",
-      }}
-    >
-      {/* Desktop Sidebar */}
-      <Sidebar />
+    <div className="min-h-dvh flex flex-col bg-surface text-on-surface">
+      {/* Universal Navigation: Desktop Sticky TopBar & Mobile Fixed Bottom Bar */}
+      <AppNav />
 
-      {/* Main Content Area */}
-      <div
-        style={{
-          flex: 1,
-          minWidth: 0,
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
-        }}
-      >
-        <TopBar />
-        <main
-          style={{
-            flex: 1,
-            padding: "28px 36px 48px",
-            maxWidth: "1400px",
-            width: "100%",
-            margin: "0 auto",
-            boxSizing: "border-box",
-          }}
-        >
-          {children}
-        </main>
-      </div>
+      {/* Main Content Area (padding-bottom ensures bottom tab bar doesn't obscure content on mobile) */}
+      <main className="flex-1 w-full mx-auto max-w-6xl px-4 md:px-6 lg:px-8 pt-4 md:pt-8 pb-24 md:pb-10">
+        {children}
+      </main>
     </div>
   );
 }
