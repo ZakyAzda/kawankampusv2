@@ -10,7 +10,9 @@ import {
   Calendar, 
   AlertTriangle, 
   ChevronRight,
-  Sparkles
+  Sparkles,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { Schedule } from "@/types/schedule";
 
@@ -18,12 +20,16 @@ interface ScheduleCardProps {
   schedule: Schedule;
   isColliding?: boolean;
   conflictId?: string;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export default function ScheduleCard({
   schedule,
   isColliding = false,
   conflictId,
+  onEdit,
+  onDelete,
 }: ScheduleCardProps) {
   const isKuliah = schedule.category?.toLowerCase() === "kuliah";
   const isOrganisasi = schedule.category?.toLowerCase() === "organisasi";
@@ -154,6 +160,32 @@ export default function ScheduleCard({
             <span>Tinjau Bentrok</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </Link>
+        </div>
+      )}
+
+      {/* Edit & Delete Action Row */}
+      {(onEdit || onDelete) && (
+        <div className="pl-1.5 pt-2 border-t border-surface-variant/40 flex items-center justify-end gap-2">
+          {onEdit && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onEdit(); }}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[12px] font-semibold text-secondary hover:text-primary hover:bg-surface-container transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+            >
+              <Pencil className="w-3 h-3" />
+              Edit
+            </button>
+          )}
+          {onDelete && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onDelete(); }}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[12px] font-semibold text-secondary hover:text-red-600 hover:bg-red-50 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-500"
+            >
+              <Trash2 className="w-3 h-3" />
+              Hapus
+            </button>
+          )}
         </div>
       )}
     </div>
