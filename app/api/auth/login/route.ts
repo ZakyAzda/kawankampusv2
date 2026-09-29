@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma, withRetry } from "@/lib/prisma";
 import { verifyPassword, createToken } from "@/lib/auth";
 
 export async function POST(req: Request) {
@@ -17,22 +17,13 @@ export async function POST(req: Request) {
     const identifier = emailOrNim.toLowerCase().trim();
 
     // Find by email or nim with retry on connection drop
-    let user = null;
-    try {
-      user = await prisma.user.findFirst({
+    const user = await withRetry(() =>
+      prisma.user.findFirst({
         where: {
           OR: [{ email: identifier }, { nim: identifier }],
         },
-      });
-    } catch (dbErr: any) {
-      console.warn("DB first attempt failed, retrying once...", dbErr?.message);
-      await prisma.$connect();
-      user = await prisma.user.findFirst({
-        where: {
-          OR: [{ email: identifier }, { nim: identifier }],
-        },
-      });
-    }
+      })
+    );
 
     if (!user) {
       return NextResponse.json(

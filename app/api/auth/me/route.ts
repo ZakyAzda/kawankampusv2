@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma, withRetry } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
 
 export async function GET() {
@@ -9,8 +9,9 @@ export async function GET() {
       return NextResponse.json({ error: "Belum terautentikasi" }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.userId },
+    const user = await withRetry(() =>
+      prisma.user.findUnique({
+        where: { id: session.userId },
       select: {
         id: true,
         name: true,
@@ -29,7 +30,7 @@ export async function GET() {
           },
         },
       },
-    });
+    }));
 
     if (!user) {
       return NextResponse.json({ error: "User tidak ditemukan" }, { status: 404 });

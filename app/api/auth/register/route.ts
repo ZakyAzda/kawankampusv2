@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma, withRetry } from "@/lib/prisma";
 import { hashPassword, createToken } from "@/lib/auth";
 
 export async function POST(req: Request) {
@@ -14,10 +14,12 @@ export async function POST(req: Request) {
       );
     }
 
-    // Check if user already exists
-    const existing = await prisma.user.findUnique({
-      where: { email: email.toLowerCase().trim() },
-    });
+    // Check if user already exists (with auto-retry on connection drop)
+    const existing = await withRetry(() =>
+      prisma.user.findUnique({
+        where: { email: email.toLowerCase().trim() },
+      })
+    );
 
     if (existing) {
       return NextResponse.json(
@@ -28,7 +30,7 @@ export async function POST(req: Request) {
 
     const hashedPassword = await hashPassword(password);
 
-    const user = await prisma.user.create({
+    const user = await withRetry(() => prisma.user.create({
       data: {
         name,
         email: email.toLowerCase().trim(),
@@ -38,7 +40,7 @@ export async function POST(req: Request) {
         nim: nim || "",
         semester: 1,
       },
-    });
+    }));
 
     const token = await createToken({
       userId: user.id,
@@ -73,8 +75,14 @@ export async function POST(req: Request) {
     return response;
   } catch (error: any) {
     console.error("Register Error:", error);
+    const msg = error?.message || "";
+    const isConnErr = msg.includes("connection") || msg.includes("remote host") || msg.includes("I/O error") || msg.includes("InternalError");
     return NextResponse.json(
-      { error: "Terjadi kesalahan server saat mendaftar" },
+      {
+        error: isConnErr
+          ? "Koneksi ke database sedang terhubung ulang, silakan coba daftar lagi."
+          : "Terjadi kesalahan server saat mendaftar. Coba lagi dalam beberapa saat.",
+      },
       { status: 500 }
     );
   }
