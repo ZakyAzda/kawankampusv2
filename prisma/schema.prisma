@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  email         String         @unique
+  password      String
+  name          String
+  university    String?        @default("Universitas Indonesia")
+  major         String?        @default("Teknik Informatika")
+  nim           String?
+  semester      Int?           @default(1)
+  avatar        String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  schedules     Schedule[]
+  conflicts     Conflict[]
+  notifications Notification[]
+}
+
+model Schedule {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String    @db.ObjectId
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name         String
+  category     String    // "kuliah" | "organisasi" | "lainnya"
+  day          String    // "senin" | "selasa" | "rabu" | "kamis" | "jumat" | "sabtu" | "minggu"
+  specificDate DateTime?
+  startTime    String    // Format "HH:mm", e.g. "08:00"
+  endTime      String    // Format "HH:mm", e.g. "10:30"
+  location     String?
+  notes        String?
+  isRoutine    Boolean   @default(true)
+  priority     String    @default("wajib") // "wajib" | "fleksibel"
+
+  // Academic specific fields (Kuliah)
+  courseCode   String?
+  lecturer     String?
+  sks          Int?
+
+  // Extracurricular specific fields (Organisasi)
+  role         String?
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  conflictsAsA Conflict[] @relation("ScheduleA")
+  conflictsAsB Conflict[] @relation("ScheduleB")
+
+  @@index([userId])
+  @@index([day])
+}
+
+model Conflict {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String    @db.ObjectId
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  scheduleAId     String    @db.ObjectId
+  scheduleA       Schedule  @relation("ScheduleA", fields: [scheduleAId], references: [id], onDelete: Cascade)
+
+  scheduleBId     String    @db.ObjectId
+  scheduleB       Schedule  @relation("ScheduleB", fields: [scheduleBId], references: [id], onDelete: Cascade)
+
+  day             String
+  overlapStart    String    // "HH:mm"
+  overlapEnd      String    // "HH:mm"
+  overlapMinutes  Int
+  status          String    @default("unresolved") // "unresolved" | "resolved" | "ignored"
+  resolutionNotes String?
+  resolvedAt      DateTime?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([scheduleAId])
+  @@index([scheduleBId])
+}
+
+model Notification {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title     String
+  message   String
+  type      String   @default("collision") // "collision" | "reminder" | "system"
+  link      String?
+  isRead    Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
