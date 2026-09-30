@@ -77,7 +77,9 @@ https://github.com/ZakyAzda/kawankampusv2
 
 **Pull Request:**
 
-Akan diisi setelah Pull Request dibuat.
+### 5. Pull Request
+
+https://github.com/ZakyAzda/kawankampusv2/pull/2
 
 ### 6. Kendala yang Dihadapi
 
