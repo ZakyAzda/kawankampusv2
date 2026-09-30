@@ -241,6 +241,10 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
 
 /* ══════════════════════════════════════════════
    MAIN PAGE
+   Mobile  : 1 kolom (tampilan lama, tidak berubah)
+   Desktop : (lg ≥ 1024px) 2 kolom
+             kiri  = identitas (sticky) + logout
+             kanan = health score + pengaturan
 ══════════════════════════════════════════════ */
 export default function ProfilePage() {
   const router = useRouter();
@@ -313,8 +317,28 @@ export default function ProfilePage() {
     { label: "Lainnya",   bg: "#fef3c7", color: "#92400e" },
   ];
 
+  /* Tombol logout dipakai di 2 tempat (mobile: paling bawah, desktop: kolom kiri) */
+  const logoutButton = (
+    <button
+      type="button"
+      onClick={handleLogout}
+      disabled={loggingOut}
+      className="w-full h-12 rounded-2xl flex items-center justify-center gap-2 text-sm font-bold transition-all active:scale-[0.99] cursor-pointer disabled:opacity-50"
+      style={{
+        background: "rgba(255,218,214,0.6)",
+        color: "var(--color-error)",
+        border: "1px solid var(--color-error-container)",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,218,214,0.9)")}
+      onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,218,214,0.6)")}
+    >
+      <IconLogout />
+      {loggingOut ? "Mengeluarkan akun..." : "Keluar dari Akun"}
+    </button>
+  );
+
   return (
-    <div className="flex flex-col gap-5 w-full max-w-lg mx-auto pb-2 animate-fade-slide-up">
+    <div className="flex flex-col gap-5 lg:gap-8 w-full max-w-lg md:max-w-2xl lg:max-w-none mx-auto pb-2 animate-fade-slide-up">
 
       {/* ── Subheader ── */}
       <div className="flex items-center justify-between pt-1">
@@ -322,7 +346,7 @@ export default function ProfilePage() {
           <p className="text-[11px] font-bold tracking-widest uppercase" style={{ color: "var(--color-secondary)" }}>
             Akun Mahasiswa
           </p>
-          <h1 className="text-2xl font-extrabold" style={{ color: "var(--color-on-surface)" }}>
+          <h1 className="text-2xl lg:text-3xl font-extrabold" style={{ color: "var(--color-on-surface)" }}>
             Profil Saya
           </h1>
         </div>
@@ -335,339 +359,324 @@ export default function ProfilePage() {
           >
             <IconTune />
           </button>
-          <button
-            type="button"
+          <Link
+            href="/profile/edit"
             aria-label="Edit Profil"
             className="w-10 h-10 rounded-full shrink-0 aspect-square flex items-center justify-center transition-colors active:scale-95 cursor-pointer"
             style={{ width: "40px", height: "40px", minWidth: "40px", minHeight: "40px", background: "var(--color-primary-fixed)", color: "var(--color-on-primary-fixed)" }}
           >
             <IconEdit />
-          </button>
+          </Link>
         </div>
       </div>
 
-      {/* ── Identity Card ── */}
-      <div
-        className="rounded-2xl p-4 flex flex-col gap-3 relative overflow-hidden shadow-sm"
-        style={{
-          background: "var(--color-surface-lowest)",
-          border: "1px solid var(--color-surface-high)",
-        }}
-      >
-        {/* decorative blob */}
-        <div
-          className="absolute -right-8 -top-8 w-32 h-32 rounded-full blur-3xl pointer-events-none opacity-40"
-          style={{ background: "var(--color-primary-fixed)" }}
-        />
+      {/* ══ GRID: mobile 1 kolom, desktop 2 kolom ══ */}
+      <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[380px_minmax(0,1fr)] lg:gap-8 lg:items-start">
 
-        {/* avatar + info */}
-        <div className="flex items-start gap-4 relative">
+        {/* ───────── KOLOM KIRI: identitas (sticky di desktop) ───────── */}
+        <aside className="flex flex-col gap-5 lg:sticky lg:top-24">
+          {/* ── Identity Card ── */}
           <div
-            className="relative shrink-0 w-16 h-16"
-            style={{ width: "64px", height: "64px", minWidth: "64px", minHeight: "64px" }}
-          >
-            <div
-              className="w-16 h-16 min-w-16 min-h-16 rounded-full shrink-0 aspect-square flex items-center justify-center text-2xl font-extrabold shadow-sm"
-              style={{
-                width: "64px",
-                height: "64px",
-                minWidth: "64px",
-                minHeight: "64px",
-                aspectRatio: "1 / 1",
-                background: "var(--color-primary-fixed)",
-                color: "var(--color-on-primary-fixed-variant)",
-              }}
-            >
-              {initial}
-            </div>
-            <div
-              className="absolute -bottom-1 -right-1 w-6 h-6 min-w-6 min-h-6 rounded-full shrink-0 aspect-square flex items-center justify-center shadow"
-              style={{
-                width: "24px",
-                height: "24px",
-                minWidth: "24px",
-                minHeight: "24px",
-                aspectRatio: "1 / 1",
-                background: "var(--color-primary)",
-                color: "var(--color-on-primary)",
-              }}
-            >
-              <IconVerified />
-            </div>
-          </div>
-
-          <div className="flex flex-col min-w-0 flex-1">
-            <h2 className="text-[17px] font-bold leading-tight" style={{ color: "var(--color-on-surface)" }}>
-              {displayName}
-            </h2>
-            <p className="text-xs mt-0.5 line-clamp-1" style={{ color: "var(--color-on-surface-variant)" }}>
-              {displayMajor} • {displayUniversity}
-            </p>
-            <div className="flex items-center gap-2 mt-2 flex-wrap">
-              {displayNim && (
-                <span
-                  className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md"
-                  style={{ background: "var(--color-surface-low)", color: "var(--color-secondary)" }}
-                >
-                  NIM {displayNim}
-                </span>
-              )}
-              <span
-                className="text-[11px] font-bold px-2 py-0.5 rounded-full"
-                style={{ background: "var(--color-primary-fixed)", color: "var(--color-on-primary-fixed-variant)" }}
-              >
-                Semester {displaySemester}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* quick status row */}
-        <div
-          className="flex items-center justify-between px-3 py-2 rounded-xl text-xs"
-          style={{ background: "var(--color-surface-low)" }}
-        >
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-            <span className="font-semibold" style={{ color: "var(--color-on-surface)" }}>
-              Semester {displaySemester} • Aktif
-            </span>
-          </div>
-          <span className="text-[11px] font-semibold text-primary flex items-center gap-1 cursor-pointer hover:underline">
-            SIAKAD UI
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
-          </span>
-        </div>
-      </div>
-
-      {/* ── Radar Health Score Bento ── */}
-      <div
-        className="rounded-2xl p-4 flex flex-col gap-3 shadow-sm"
-        style={{
-          background: "var(--color-surface-lowest)",
-          border: "1px solid var(--color-surface-high)",
-        }}
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div
-              className="w-7 h-7 rounded-lg flex items-center justify-center text-primary"
-              style={{ background: "var(--color-primary-fixed)" }}
-            >
-              <IconRadar />
-            </div>
-            <span className="text-sm font-bold" style={{ color: "var(--color-on-surface)" }}>
-              Radar Health Score
-            </span>
-          </div>
-          <span
-            className="text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1"
+            className="rounded-2xl p-4 lg:p-6 flex flex-col gap-3 lg:gap-5 relative overflow-hidden shadow-sm"
             style={{
-              background: healthScore >= 80 ? "#d1fae5" : "#fee2e2",
-              color: healthScore >= 80 ? "#065f46" : "#991b1b",
+              background: "var(--color-surface-lowest)",
+              border: "1px solid var(--color-surface-high)",
             }}
           >
-            <IconCheck />
-            {healthScore >= 90 ? "Optimal" : healthScore >= 70 ? "Baik" : "Perlu Evaluasi"}
-          </span>
-        </div>
+            {/* decorative blob */}
+            <div
+              className="absolute -right-8 -top-8 w-32 h-32 lg:w-48 lg:h-48 rounded-full blur-3xl pointer-events-none opacity-40"
+              style={{ background: "var(--color-primary-fixed)" }}
+            />
 
-        {/* 3 bento stat columns */}
-        <div className="grid grid-cols-3 gap-2.5 pt-1">
-          {/* Ring + score */}
-          <div
-            className="flex flex-col items-center justify-center py-3 px-2 rounded-xl"
-            style={{ background: "var(--color-surface-low)" }}
-          >
-            <div className="relative w-12 h-12 flex items-center justify-center">
-              <svg className="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
-                <path
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                  fill="none"
-                  stroke="var(--color-surface-high)"
-                  strokeWidth="3.5"
-                />
-                <path
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                  fill="none"
-                  stroke="var(--color-primary)"
-                  strokeWidth="3.5"
-                  strokeDasharray={dashArray}
-                  strokeLinecap="round"
-                />
-              </svg>
-              <span className="absolute font-mono text-xs font-extrabold text-primary">
-                {healthScore}%
-              </span>
+            {/* avatar + info (desktop: tersusun vertikal di tengah) */}
+            <div className="flex items-start gap-4 relative lg:flex-col lg:items-center lg:text-center lg:gap-4">
+              <div className="relative shrink-0 w-16 h-16 lg:w-24 lg:h-24">
+                <div
+                  className="w-16 h-16 lg:w-24 lg:h-24 rounded-full shrink-0 aspect-square flex items-center justify-center text-2xl lg:text-4xl font-extrabold shadow-sm"
+                  style={{
+                    background: "var(--color-primary-fixed)",
+                    color: "var(--color-on-primary-fixed-variant)",
+                  }}
+                >
+                  {initial}
+                </div>
+                <div
+                  className="absolute -bottom-1 -right-1 w-6 h-6 lg:w-8 lg:h-8 rounded-full shrink-0 aspect-square flex items-center justify-center shadow"
+                  style={{
+                    background: "var(--color-primary)",
+                    color: "var(--color-on-primary)",
+                  }}
+                >
+                  <IconVerified />
+                </div>
+              </div>
+
+              <div className="flex flex-col min-w-0 flex-1 lg:flex-none lg:items-center">
+                <h2 className="text-[17px] lg:text-xl font-bold leading-tight" style={{ color: "var(--color-on-surface)" }}>
+                  {displayName}
+                </h2>
+                <p className="text-xs lg:text-sm mt-0.5 lg:mt-1 line-clamp-1 lg:line-clamp-2" style={{ color: "var(--color-on-surface-variant)" }}>
+                  {displayMajor} • {displayUniversity}
+                </p>
+                <div className="flex items-center gap-2 mt-2 lg:mt-3 flex-wrap lg:justify-center">
+                  {displayNim && (
+                    <span
+                      className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md"
+                      style={{ background: "var(--color-surface-low)", color: "var(--color-secondary)" }}
+                    >
+                      NIM {displayNim}
+                    </span>
+                  )}
+                  <span
+                    className="text-[11px] font-bold px-2 py-0.5 rounded-full"
+                    style={{ background: "var(--color-primary-fixed)", color: "var(--color-on-primary-fixed-variant)" }}
+                  >
+                    Semester {displaySemester}
+                  </span>
+                </div>
+              </div>
             </div>
-            <span className="text-[10px] font-medium text-secondary mt-1.5 text-center leading-tight">
-              Bebas Bentrok
-            </span>
-          </div>
 
-          {/* Jadwal Aktif */}
-          <div
-            className="flex flex-col items-center justify-center py-3 px-2 rounded-xl text-center"
-            style={{ background: "var(--color-surface-low)" }}
-          >
-            <span className="text-2xl font-extrabold text-on-surface">
-              {totalSchedules}
-            </span>
-            <span className="text-[10px] font-medium text-secondary mt-0.5 leading-tight">
-              Jadwal Aktif
-            </span>
-            <span className="text-[9px] font-bold text-primary mt-1">
-              Minggu ini
-            </span>
-          </div>
-
-          {/* Konflik Selesai */}
-          <div
-            className="flex flex-col items-center justify-center py-3 px-2 rounded-xl text-center"
-            style={{ background: "var(--color-surface-low)" }}
-          >
-            <div className="flex items-center gap-1">
-              <span
-                className="text-2xl font-extrabold"
-                style={{ color: unresolvedConflicts > 0 ? "var(--color-tertiary)" : "#059669" }}
-              >
-                {unresolvedConflicts}
-              </span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            </div>
-            <span className="text-[10px] font-medium text-secondary mt-0.5 leading-tight">
-              Bentrokan
-            </span>
-            <span
-              className="text-[9px] font-bold mt-1"
-              style={{ color: unresolvedConflicts === 0 ? "#059669" : "var(--color-tertiary)" }}
+            {/* quick status row */}
+            <div
+              className="flex items-center justify-between px-3 py-2 lg:py-2.5 rounded-xl text-xs relative"
+              style={{ background: "var(--color-surface-low)" }}
             >
-              {unresolvedConflicts === 0 ? "100% Clear" : "Perlu Selesai"}
-            </span>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+                <span className="font-semibold" style={{ color: "var(--color-on-surface)" }}>
+                  Semester {displaySemester} • Aktif
+                </span>
+              </div>
+              <span className="text-[11px] font-semibold text-primary flex items-center gap-1 cursor-pointer hover:underline">
+                SIAKAD UI
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </span>
+            </div>
           </div>
+
+          {/* Logout versi desktop (di kolom kiri) */}
+          <div className="hidden lg:block">{logoutButton}</div>
+        </aside>
+
+        {/* ───────── KOLOM KANAN: health score + pengaturan ───────── */}
+        <div className="flex flex-col gap-5 min-w-0">
+          {/* ── Radar Health Score Bento ── */}
+          <div
+            className="rounded-2xl p-4 lg:p-6 flex flex-col gap-3 lg:gap-5 shadow-sm"
+            style={{
+              background: "var(--color-surface-lowest)",
+              border: "1px solid var(--color-surface-high)",
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 lg:gap-3">
+                <div
+                  className="w-7 h-7 lg:w-9 lg:h-9 rounded-lg flex items-center justify-center text-primary"
+                  style={{ background: "var(--color-primary-fixed)" }}
+                >
+                  <IconRadar />
+                </div>
+                <span className="text-sm lg:text-base font-bold" style={{ color: "var(--color-on-surface)" }}>
+                  Radar Health Score
+                </span>
+              </div>
+              <span
+                className="text-[11px] lg:text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1"
+                style={{
+                  background: healthScore >= 80 ? "#d1fae5" : "#fee2e2",
+                  color: healthScore >= 80 ? "#065f46" : "#991b1b",
+                }}
+              >
+                <IconCheck />
+                {healthScore >= 90 ? "Optimal" : healthScore >= 70 ? "Baik" : "Perlu Evaluasi"}
+              </span>
+            </div>
+
+            {/* 3 bento stat columns */}
+            <div className="grid grid-cols-3 gap-2.5 lg:gap-4 pt-1">
+              {/* Ring + score */}
+              <div
+                className="flex flex-col items-center justify-center py-3 lg:py-6 px-2 rounded-xl"
+                style={{ background: "var(--color-surface-low)" }}
+              >
+                <div className="relative w-12 h-12 lg:w-20 lg:h-20 flex items-center justify-center">
+                  <svg className="w-12 h-12 lg:w-20 lg:h-20 -rotate-90" viewBox="0 0 36 36">
+                    <path
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none"
+                      stroke="var(--color-surface-high)"
+                      strokeWidth="3.5"
+                    />
+                    <path
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none"
+                      stroke="var(--color-primary)"
+                      strokeWidth="3.5"
+                      strokeDasharray={dashArray}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <span className="absolute font-mono text-xs lg:text-base font-extrabold text-primary">
+                    {healthScore}%
+                  </span>
+                </div>
+                <span className="text-[10px] lg:text-xs font-medium text-secondary mt-1.5 lg:mt-3 text-center leading-tight">
+                  Bebas Bentrok
+                </span>
+              </div>
+
+              {/* Jadwal Aktif */}
+              <div
+                className="flex flex-col items-center justify-center py-3 lg:py-6 px-2 rounded-xl text-center"
+                style={{ background: "var(--color-surface-low)" }}
+              >
+                <span className="text-2xl lg:text-5xl font-extrabold text-on-surface">
+                  {totalSchedules}
+                </span>
+                <span className="text-[10px] lg:text-xs font-medium text-secondary mt-0.5 lg:mt-2 leading-tight">
+                  Jadwal Aktif
+                </span>
+                <span className="text-[9px] lg:text-[11px] font-bold text-primary mt-1">
+                  Minggu ini
+                </span>
+              </div>
+
+              {/* Konflik Selesai */}
+              <div
+                className="flex flex-col items-center justify-center py-3 lg:py-6 px-2 rounded-xl text-center"
+                style={{ background: "var(--color-surface-low)" }}
+              >
+                <div className="flex items-center gap-1">
+                  <span
+                    className="text-2xl lg:text-5xl font-extrabold"
+                    style={{ color: unresolvedConflicts > 0 ? "var(--color-tertiary)" : "#059669" }}
+                  >
+                    {unresolvedConflicts}
+                  </span>
+                  <svg className="w-3.5 h-3.5 lg:w-5 lg:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+                <span className="text-[10px] lg:text-xs font-medium text-secondary mt-0.5 lg:mt-2 leading-tight">
+                  Bentrokan
+                </span>
+                <span
+                  className="text-[9px] lg:text-[11px] font-bold mt-1"
+                  style={{ color: unresolvedConflicts === 0 ? "#059669" : "var(--color-tertiary)" }}
+                >
+                  {unresolvedConflicts === 0 ? "100% Clear" : "Perlu Selesai"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Jadwal & Kalender Settings ── */}
+          <SettingsGroup label="Jadwal & Kalender">
+            <SettingRow
+              icon={<IconSchool />}
+              title="Sinkronisasi SIAKAD"
+              subtitle="Terhubung otomatis ke portal akademik"
+              right={
+                <span
+                  className="text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1"
+                  style={{ background: "#d1fae5", color: "#065f46" }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+                  Aktif
+                </span>
+              }
+            />
+            <SettingRow
+              icon={<IconCalendar />}
+              title="Ekspor Kalender"
+              subtitle="Google Calendar, iCal (.ics)"
+              right={
+                <div className="flex items-center gap-1">
+                  <span
+                    className="text-[11px] font-bold px-2.5 py-1 rounded-full"
+                    style={{ background: "var(--color-surface-container)", color: "var(--color-on-surface-variant)" }}
+                  >
+                    .ICS
+                  </span>
+                  <span className="text-secondary"><IconChevron /></span>
+                </div>
+              }
+            />
+            <SettingRow
+              icon={<IconCategory />}
+              title="Kategori Jadwal Kustom"
+              last
+              right={<span className="text-secondary"><IconAdd /></span>}
+            />
+            {/* category pills */}
+            <div className="px-4 pb-3 flex flex-wrap gap-1.5 pl-16">
+              {CUSTOM_CATEGORIES.map((c) => (
+                <span
+                  key={c.label}
+                  className="text-[11px] font-semibold px-2.5 py-1 rounded-full"
+                  style={{ background: c.bg, color: c.color }}
+                >
+                  {c.label}
+                </span>
+              ))}
+            </div>
+          </SettingsGroup>
+
+          {/* ── Preferensi Radar & Deteksi ── */}
+          <SettingsGroup label="Preferensi Radar & Deteksi">
+            <SettingRow
+              icon={<IconBell />}
+              title="Peringatan Real-Time"
+              subtitle="Pop-up instan saat ada bentrokan baru"
+              right={
+                <Toggle on={realtimeAlert} onToggle={() => setRealtimeAlert((v) => !v)} />
+              }
+            />
+            <SettingRow
+              icon={<IconClock />}
+              title="Toleransi Jeda Kelas"
+              subtitle="Waktu tempuh pindah gedung/ruang"
+              last
+              right={
+                <div className="flex items-center gap-1">
+                  <span
+                    className="text-[11px] font-semibold px-2.5 py-1 rounded-lg"
+                    style={{ background: "var(--color-surface-container)", color: "var(--color-on-surface-variant)" }}
+                  >
+                    15 Menit
+                  </span>
+                  <span className="text-secondary"><IconChevron /></span>
+                </div>
+              }
+            />
+          </SettingsGroup>
+
+          {/* ── Akun & Keamanan ── */}
+          <SettingsGroup label="Akun & Keamanan">
+            <SettingRow
+              icon={<span className="text-secondary"><IconLock /></span>}
+              title="Ganti Kata Sandi"
+              href="/profile/change-password"
+              right={<span className="text-secondary"><IconChevron /></span>}
+            />
+            <SettingRow
+              icon={<span className="text-secondary"><IconHelp /></span>}
+              title="Bantuan & Dukungan"
+              last
+              right={<span className="text-secondary"><IconChevron /></span>}
+            />
+          </SettingsGroup>
         </div>
+
+        {/* Logout versi mobile (paling bawah) */}
+        <div className="lg:hidden">{logoutButton}</div>
       </div>
-
-      {/* ── Jadwal & Kalender Settings ── */}
-      <SettingsGroup label="Jadwal & Kalender">
-        <SettingRow
-          icon={<IconSchool />}
-          title="Sinkronisasi SIAKAD"
-          subtitle="Terhubung otomatis ke portal akademik"
-          right={
-            <span
-              className="text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1"
-              style={{ background: "#d1fae5", color: "#065f46" }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-              Aktif
-            </span>
-          }
-        />
-        <SettingRow
-          icon={<IconCalendar />}
-          title="Ekspor Kalender"
-          subtitle="Google Calendar, iCal (.ics)"
-          right={
-            <div className="flex items-center gap-1">
-              <span
-                className="text-[11px] font-bold px-2.5 py-1 rounded-full"
-                style={{ background: "var(--color-surface-container)", color: "var(--color-on-surface-variant)" }}
-              >
-                .ICS
-              </span>
-              <span className="text-secondary"><IconChevron /></span>
-            </div>
-          }
-        />
-        <SettingRow
-          icon={<IconCategory />}
-          title="Kategori Jadwal Kustom"
-          last
-          right={<span className="text-secondary"><IconAdd /></span>}
-        />
-        {/* category pills */}
-        <div className="px-4 pb-3 flex flex-wrap gap-1.5 pl-16">
-          {CUSTOM_CATEGORIES.map((c) => (
-            <span
-              key={c.label}
-              className="text-[11px] font-semibold px-2.5 py-1 rounded-full"
-              style={{ background: c.bg, color: c.color }}
-            >
-              {c.label}
-            </span>
-          ))}
-        </div>
-      </SettingsGroup>
-
-      {/* ── Preferensi Radar & Deteksi ── */}
-      <SettingsGroup label="Preferensi Radar & Deteksi">
-        <SettingRow
-          icon={<IconBell />}
-          title="Peringatan Real-Time"
-          subtitle="Pop-up instan saat ada bentrokan baru"
-          right={
-            <Toggle on={realtimeAlert} onToggle={() => setRealtimeAlert((v) => !v)} />
-          }
-        />
-        <SettingRow
-          icon={<IconClock />}
-          title="Toleransi Jeda Kelas"
-          subtitle="Waktu tempuh pindah gedung/ruang"
-          last
-          right={
-            <div className="flex items-center gap-1">
-              <span
-                className="text-[11px] font-semibold px-2.5 py-1 rounded-lg"
-                style={{ background: "var(--color-surface-container)", color: "var(--color-on-surface-variant)" }}
-              >
-                15 Menit
-              </span>
-              <span className="text-secondary"><IconChevron /></span>
-            </div>
-          }
-        />
-      </SettingsGroup>
-
-      {/* ── Akun & Keamanan ── */}
-      <SettingsGroup label="Akun & Keamanan">
-        <SettingRow
-          icon={<span className="text-secondary"><IconLock /></span>}
-          title="Ganti Kata Sandi"
-          href="/profile/change-password"
-          right={<span className="text-secondary"><IconChevron /></span>}
-        />
-        <SettingRow
-          icon={<span className="text-secondary"><IconHelp /></span>}
-          title="Bantuan & Dukungan"
-          last
-          right={<span className="text-secondary"><IconChevron /></span>}
-        />
-      </SettingsGroup>
-
-      {/* ── Logout ── */}
-      <button
-        type="button"
-        onClick={handleLogout}
-        disabled={loggingOut}
-        className="w-full h-12 rounded-2xl flex items-center justify-center gap-2 text-sm font-bold transition-all active:scale-[0.99] cursor-pointer disabled:opacity-50"
-        style={{
-          background: "rgba(255,218,214,0.6)",
-          color: "var(--color-error)",
-          border: "1px solid var(--color-error-container)",
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,218,214,0.9)")}
-        onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,218,214,0.6)")}
-      >
-        <IconLogout />
-        {loggingOut ? "Mengeluarkan akun..." : "Keluar dari Akun"}
-      </button>
 
       {/* ── Footer ── */}
       <div className="flex flex-col items-center text-center py-1 gap-0.5">
