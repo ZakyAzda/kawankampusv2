@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import {
   ChevronLeft,
@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import ScheduleCard from "@/components/schedule/ScheduleCard";
 import CategoryChip from "@/components/ui/CategoryChip";
+import EditScheduleModal from "@/components/EditScheduleModal";
 import { Schedule, Conflict, ConflictStats } from "@/types/schedule";
 
 // 7 Days of the week in Indonesian
@@ -42,12 +43,15 @@ export default function CalendarPage() {
   const [stats, setStats] = useState<ConflictStats | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Edit modal state
+  const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   // Filter & Day selections
   const [selectedDay, setSelectedDay] = useState("kamis");
   const [activeCategory, setActiveCategory] = useState<string>("semua");
 
-  // Load real data from DB
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [schedRes, confRes] = await Promise.all([
@@ -69,7 +73,36 @@ export default function CalendarPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  // Handle delete schedule
+  async function handleDelete(scheduleId: string, name: string) {
+    if (!confirm(`Hapus jadwal "${name}"? Tindakan ini tidak bisa dibatalkan.`)) return;
+    try {
+      const res = await fetch(`/api/schedules/${scheduleId}`, { method: "DELETE" });
+      if (res.ok) {
+        await loadData(); // refresh data incl. conflicts
+      } else {
+        const data = await res.json();
+        alert(data.error || "Gagal menghapus jadwal");
+      }
+    } catch {
+      alert("Terjadi kesalahan jaringan.");
+    }
+  }
+
+  // Handle edit modal open
+  function handleEdit(schedule: Schedule) {
+    setEditingSchedule(schedule);
+    setIsEditModalOpen(true);
+  }
+
+  // Handle successful save from edit modal
+  async function handleEditSaved() {
+    setIsEditModalOpen(false);
+    setEditingSchedule(null);
+    await loadData();
+  }
 
   useEffect(() => {
     loadData();
@@ -134,6 +167,7 @@ export default function CalendarPage() {
   }, [daySchedules, clashingScheduleMap]);
 
   return (
+    <>
     <div className="flex flex-col gap-6 w-full">
       {/* ====================================================================
           1. Month Selector & Sub-Header
@@ -290,6 +324,8 @@ export default function CalendarPage() {
                 schedule={schedule}
                 isColliding={clashingScheduleMap.has(schedule.id)}
                 conflictId={clashingScheduleMap.get(schedule.id)}
+                onEdit={() => handleEdit(schedule)}
+                onDelete={() => handleDelete(schedule.id, schedule.name)}
               />
             ))
           )}
@@ -377,5 +413,14 @@ export default function CalendarPage() {
         </div>
       </div>
     </div>
+
+    {/* Edit Schedule Modal */}
+    <EditScheduleModal
+      isOpen={isEditModalOpen}
+      schedule={editingSchedule}
+      onClose={() => { setIsEditModalOpen(false); setEditingSchedule(null); }}
+      onSaved={handleEditSaved}
+    />
+    </>
   );
 }

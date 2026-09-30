@@ -20,6 +20,7 @@ import ConflictBanner from "@/components/schedule/ConflictBanner";
 import ScheduleCard from "@/components/schedule/ScheduleCard";
 import CategoryChip from "@/components/ui/CategoryChip";
 import SectionHeader from "@/components/ui/SectionHeader";
+import EditScheduleModal from "@/components/EditScheduleModal";
 import { Schedule, Conflict, ConflictStats, UserProfile } from "@/types/schedule";
 
 // Map Javascript getDay (0 = Sun, 1 = Mon, ...) to DB lowercase day string
@@ -44,6 +45,10 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("semua");
+
+  // Edit modal state
+  const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Determine today's day in Indonesian
   const todayDayKey = useMemo(() => {
@@ -99,6 +104,35 @@ export default function HomePage() {
       setLoading(false);
     }
   };
+
+  // Handle delete schedule
+  async function handleDelete(scheduleId: string, name: string) {
+    if (!confirm(`Hapus jadwal "${name}"? Tindakan ini tidak bisa dibatalkan.`)) return;
+    try {
+      const res = await fetch(`/api/schedules/${scheduleId}`, { method: "DELETE" });
+      if (res.ok) {
+        await loadDashboardData();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Gagal menghapus jadwal");
+      }
+    } catch {
+      alert("Terjadi kesalahan jaringan.");
+    }
+  }
+
+  // Handle edit modal open
+  function handleEdit(schedule: Schedule) {
+    setEditingSchedule(schedule);
+    setIsEditModalOpen(true);
+  }
+
+  // Handle successful save from edit modal
+  async function handleEditSaved() {
+    setIsEditModalOpen(false);
+    setEditingSchedule(null);
+    await loadDashboardData();
+  }
 
   useEffect(() => {
     loadDashboardData();
@@ -329,6 +363,8 @@ export default function HomePage() {
                   schedule={schedule}
                   isColliding={collidingScheduleMap.has(schedule.id)}
                   conflictId={collidingScheduleMap.get(schedule.id)}
+                  onEdit={() => handleEdit(schedule)}
+                  onDelete={() => handleDelete(schedule.id, schedule.name)}
                 />
               ))
             )}
@@ -406,6 +442,17 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* Edit Schedule Modal */}
+      <EditScheduleModal
+        isOpen={isEditModalOpen}
+        schedule={editingSchedule}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setEditingSchedule(null);
+        }}
+        onSaved={handleEditSaved}
+      />
     </div>
   );
 }

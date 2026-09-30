@@ -1,23 +1,34 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma, withRetry } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
 
 export async function GET(
-  req: Request,
+  _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await getSessionUser();
+    if (!session) {
+      return NextResponse.json({ error: "Belum terautentikasi" }, { status: 401 });
+    }
+
     const { id } = await params;
-    const conflict = await prisma.conflict.findUnique({
-      where: { id },
-      include: {
-        scheduleA: true,
-        scheduleB: true,
-      },
-    });
+    const conflict = await withRetry(() =>
+      prisma.conflict.findUnique({
+        where: { id },
+        include: {
+          scheduleA: true,
+          scheduleB: true,
+        },
+      })
+    );
 
     if (!conflict) {
       return NextResponse.json({ error: "Konflik tidak ditemukan" }, { status: 404 });
+    }
+
+    if (conflict.userId !== session.userId) {
+      return NextResponse.json({ error: "Tidak berhak mengakses konflik ini" }, { status: 403 });
     }
 
     return NextResponse.json({ conflict });
@@ -41,22 +52,25 @@ export async function PATCH(
     const body = await req.json();
     const { status, resolutionNotes } = body;
 
-    const existing = await prisma.conflict.findUnique({
-      where: { id },
-    });
+    const existing = await withRetry(() =>
+      prisma.conflict.findUnique({ where: { id } })
+    );
 
     if (!existing || existing.userId !== session.userId) {
       return NextResponse.json({ error: "Konflik tidak ditemukan atau tidak berhak" }, { status: 404 });
     }
 
-    const updated = await prisma.conflict.update({
-      where: { id },
-      data: {
-        ...(status && { status }),
-        ...(resolutionNotes !== undefined && { resolutionNotes }),
-        ...(status === "resolved" && { resolvedAt: new Date() }),
-      },
-    });
+    const updated = await withRetry(() =>
+      prisma.conflict.update({
+        where: { id },
+        data: {
+          ...(status && { status }),
+          ...(resolutionNotes !== undefined && { resolutionNotes }),
+          ...(status === "resolved" && { resolvedAt: new Date() }),
+        },
+        include: { scheduleA: true, scheduleB: true },
+      })
+    );
 
     return NextResponse.json({ message: "Status konflik berhasil diperbarui", conflict: updated });
   } catch (error: any) {

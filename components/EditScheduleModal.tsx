@@ -1,294 +1,456 @@
 "use client";
 
-import React, { useState } from "react";
-import { ScheduleItem } from "@/types/schedule";
+import React, { useState, useEffect } from "react";
+import { X, Save, RefreshCw, School, Users, Layers } from "lucide-react";
+import { Schedule } from "@/types/schedule";
+
+const DAYS = [
+  { key: "senin", label: "Senin" },
+  { key: "selasa", label: "Selasa" },
+  { key: "rabu", label: "Rabu" },
+  { key: "kamis", label: "Kamis" },
+  { key: "jumat", label: "Jumat" },
+  { key: "sabtu", label: "Sabtu" },
+  { key: "minggu", label: "Minggu" },
+];
 
 interface EditScheduleModalProps {
   isOpen: boolean;
-  schedule: ScheduleItem | null;
+  schedule: Schedule | null;
   onClose: () => void;
-  onSave: (updatedSchedule: ScheduleItem) => void;
+  onSaved: (updated: Schedule) => void;
 }
 
-export default function EditScheduleModal({ isOpen, schedule, onClose, onSave }: EditScheduleModalProps) {
-  if (!isOpen || !schedule) return null;
-
-  return (
-    <EditScheduleDialog
-      key={schedule.id}
-      schedule={schedule}
-      onClose={onClose}
-      onSave={onSave}
-    />
-  );
+interface FormErrors {
+  name?: string;
+  day?: string;
+  startTime?: string;
+  endTime?: string;
+  timeRange?: string;
 }
 
-function EditScheduleDialog({
+export default function EditScheduleModal({
+  isOpen,
   schedule,
   onClose,
-  onSave,
-}: {
-  schedule: ScheduleItem;
-  onClose: () => void;
-  onSave: (updatedSchedule: ScheduleItem) => void;
-}) {
-  const [formData, setFormData] = useState<ScheduleItem>({ ...schedule });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  onSaved,
+}: EditScheduleModalProps) {
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("kuliah");
+  const [day, setDay] = useState("senin");
+  const [startTime, setStartTime] = useState("08:00");
+  const [endTime, setEndTime] = useState("10:00");
+  const [location, setLocation] = useState("");
+  const [notes, setNotes] = useState("");
+  const [priority, setPriority] = useState("wajib");
+  const [lecturer, setLecturer] = useState("");
+  const [sks, setSks] = useState("");
+  const [role, setRole] = useState("");
 
+  const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [apiError, setApiError] = useState<string | null>(null);
 
-  const handleChange = (field: keyof ScheduleItem, value: string | number) => {
-    setFormData((p) => ({ ...p, [field]: value }));
-    if (errors[field]) setErrors((p) => { const n = { ...p }; delete n[field]; return n; });
-  };
+  // Populate form when schedule changes
+  useEffect(() => {
+    if (schedule) {
+      setName(schedule.name || "");
+      setCategory(schedule.category || "kuliah");
+      setDay(schedule.day || "senin");
+      setStartTime(schedule.startTime || "08:00");
+      setEndTime(schedule.endTime || "10:00");
+      setLocation(schedule.location || "");
+      setNotes(schedule.notes || "");
+      setPriority(schedule.priority || "wajib");
+      setLecturer(schedule.lecturer || "");
+      setSks(schedule.sks != null ? String(schedule.sks) : "");
+      setRole(schedule.role || "");
+      setErrors({});
+      setApiError(null);
+    }
+  }, [schedule]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  function validate(): boolean {
+    const newErrors: FormErrors = {};
+    if (!name.trim()) newErrors.name = "Nama jadwal wajib diisi";
+    if (!day) newErrors.day = "Pilih hari";
+    if (!startTime) newErrors.startTime = "Jam mulai wajib diisi";
+    if (!endTime) newErrors.endTime = "Jam selesai wajib diisi";
+    if (startTime && endTime) {
+      const [sh, sm] = startTime.split(":").map(Number);
+      const [eh, em] = endTime.split(":").map(Number);
+      if (sh * 60 + sm >= eh * 60 + em) {
+        newErrors.timeRange = "Jam selesai harus setelah jam mulai";
+      }
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!formData) return;
-    const newErrors: Record<string, string> = {};
-    if (!formData.courseName.trim()) newErrors.courseName = "Nama mata kuliah wajib diisi";
-    if (!formData.lecturer.trim())   newErrors.lecturer   = "Nama dosen wajib diisi";
-    if (!formData.room.trim())       newErrors.room       = "Ruangan wajib diisi";
-    if (!formData.startTime)         newErrors.startTime  = "Jam mulai wajib diisi";
-    if (!formData.endTime)           newErrors.endTime    = "Jam selesai wajib diisi";
-    if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return; }
-    setIsSubmitting(true);
-    setTimeout(() => { onSave(formData); setIsSubmitting(false); onClose(); }, 320);
-  };
+    if (!schedule || !validate()) return;
 
-  const inputBase: React.CSSProperties = {
+    setSubmitting(true);
+    setApiError(null);
+
+    try {
+      const body: Record<string, any> = {
+        name: name.trim(),
+        category,
+        day,
+        startTime,
+        endTime,
+        location: location.trim() || null,
+        notes: notes.trim() || null,
+        priority,
+      };
+      if (category === "kuliah") {
+        body.lecturer = lecturer.trim() || null;
+        body.sks = sks ? Number(sks) : null;
+      }
+      if (category === "organisasi") {
+        body.role = role.trim() || null;
+      }
+
+      const res = await fetch(`/api/schedules/${schedule.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setApiError(data.error || "Gagal memperbarui jadwal");
+        return;
+      }
+
+      onSaved(data.schedule);
+      onClose();
+    } catch {
+      setApiError("Terjadi kesalahan jaringan. Coba lagi.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (!isOpen || !schedule) return null;
+
+  const inputStyle: React.CSSProperties = {
     width: "100%",
     padding: "9px 12px",
     fontSize: "0.875rem",
-    borderRadius: "10px",
+    borderRadius: 10,
+    border: "1px solid #E5E7EB",
     outline: "none",
-    background: "#f8f9fc",
+    background: "#F9FAFB",
     color: "#111827",
-    transition: "border-color 0.15s",
+    boxSizing: "border-box",
   };
 
-  const inputStyle = (field: string): React.CSSProperties => ({
-    ...inputBase,
-    border: errors[field] ? "1px solid #dc2626" : "1px solid #e8eaf0",
-  });
-
-  const label: React.CSSProperties = {
-    display: "block",
-    fontSize: "11px",
-    fontWeight: 700,
-    textTransform: "uppercase",
-    letterSpacing: "0.07em",
-    color: "#6b7280",
-    marginBottom: "6px",
-  };
-
-  const focusBorder = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-    (e.currentTarget.style.borderColor = "#4f46e5");
-  const blurBorder = (field: string) => (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-    (e.currentTarget.style.borderColor = errors[field] ? "#dc2626" : "#e8eaf0");
+  const errorInputStyle: React.CSSProperties = { ...inputStyle, border: "1px solid #EF4444", background: "#FEF2F2" };
+  const labelStyle: React.CSSProperties = { display: "block", fontSize: 12, fontWeight: 700, color: "#374151", marginBottom: 5 };
+  const errorTextStyle: React.CSSProperties = { fontSize: 11, color: "#EF4444", marginTop: 3 };
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.45)",
+        zIndex: 200,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "16px",
+        backdropFilter: "blur(4px)",
+      }}
     >
       <div
-        className="modal-enter w-full max-w-xl flex flex-col overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
         style={{
-          background: "#ffffff",
-          border: "1px solid #e8eaf0",
-          borderRadius: "20px",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.15), 0 8px 24px rgba(0,0,0,0.08)",
+          background: "#FFFFFF",
+          borderRadius: 20,
+          width: "100%",
+          maxWidth: 560,
           maxHeight: "90vh",
+          overflowY: "auto",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
         }}
-        role="dialog"
-        aria-modal="true"
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between px-6 py-4"
-          style={{ borderBottom: "1px solid #f1f3f8" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "20px 24px 16px",
+            borderBottom: "1px solid #F3F4F6",
+            position: "sticky",
+            top: 0,
+            background: "#FFFFFF",
+            zIndex: 1,
+          }}
         >
-          <div className="flex items-center gap-3">
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: "linear-gradient(135deg, #4f46e5, #7c3aed)" }}
-            >
-              <svg className="w-4.5 h-4.5 text-white" fill="none" stroke="white" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="font-bold text-sm" style={{ color: "#111827" }}>Edit Jadwal Kuliah</h3>
-              <p className="text-[11px]" style={{ color: "#9ca3af" }}>
-                {formData.courseCode} · {formData.type}
-              </p>
-            </div>
+          <div>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: "#111827" }}>Edit Jadwal</h2>
+            <p style={{ fontSize: 12, color: "#9CA3AF", marginTop: 2 }}>Perbarui informasi jadwal kamu</p>
           </div>
           <button
-            type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors cursor-pointer"
-            style={{ color: "#9ca3af" }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "#f1f3f8"; e.currentTarget.style.color = "#374151"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#9ca3af"; }}
+            style={{ width: 36, height: 36, borderRadius: 10, border: "1px solid #E5E7EB", background: "#F9FAFB", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X size={16} color="#6B7280" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6">
-          <div className="flex flex-col gap-4">
-
-            {/* Nama MK */}
-            <div>
-              <label style={label}>Nama Mata Kuliah</label>
-              <input
-                type="text" value={formData.courseName}
-                onChange={(e) => handleChange("courseName", e.target.value)}
-                style={inputStyle("courseName")}
-                placeholder="Contoh: Pemrograman Web Lanjut"
-                onFocus={focusBorder} onBlur={blurBorder("courseName")}
-              />
-              {errors.courseName && <p className="text-xs mt-1" style={{ color: "#dc2626" }}>{errors.courseName}</p>}
+        <form onSubmit={handleSubmit} style={{ padding: "20px 24px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
+          {/* API Error */}
+          {apiError && (
+            <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "#DC2626", fontWeight: 600 }}>
+              {apiError}
             </div>
+          )}
 
-            {/* Dosen + SKS */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="col-span-2">
-                <label style={label}>Dosen Pengampu</label>
-                <input
-                  type="text" value={formData.lecturer}
-                  onChange={(e) => handleChange("lecturer", e.target.value)}
-                  style={inputStyle("lecturer")}
-                  placeholder="Nama dosen beserta gelar"
-                  onFocus={focusBorder} onBlur={blurBorder("lecturer")}
-                />
-                {errors.lecturer && <p className="text-xs mt-1" style={{ color: "#dc2626" }}>{errors.lecturer}</p>}
-              </div>
-              <div>
-                <label style={label}>SKS</label>
-                <select
-                  value={formData.sks}
-                  onChange={(e) => handleChange("sks", Number(e.target.value))}
-                  style={{ ...inputStyle(""), cursor: "pointer" }}
-                  onFocus={focusBorder} onBlur={blurBorder("")}
-                >
-                  {[1, 2, 3, 4, 6].map((n) => <option key={n} value={n}>{n} SKS</option>)}
-                </select>
-              </div>
-            </div>
+          {/* Name */}
+          <div>
+            <label style={labelStyle}>Nama Jadwal *</label>
+            <input
+              value={name}
+              onChange={(e) => { setName(e.target.value); setErrors((p) => ({ ...p, name: undefined })); }}
+              placeholder="Contoh: Pemrograman Web, Rapat BEM..."
+              style={errors.name ? errorInputStyle : inputStyle}
+            />
+            {errors.name && <p style={errorTextStyle}>{errors.name}</p>}
+          </div>
 
-            {/* Hari + Jam */}
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label style={label}>Hari</label>
-                <select
-                  value={formData.day}
-                  onChange={(e) => handleChange("day", e.target.value as ScheduleItem["day"])}
-                  style={{ ...inputStyle(""), cursor: "pointer" }}
-                  onFocus={focusBorder} onBlur={blurBorder("")}
-                >
-                  {["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"].map((d) => <option key={d} value={d}>{d}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={label}>Jam Mulai</label>
-                <input type="time" value={formData.startTime}
-                  onChange={(e) => handleChange("startTime", e.target.value)}
-                  style={inputStyle("startTime")} onFocus={focusBorder} onBlur={blurBorder("startTime")} />
-              </div>
-              <div>
-                <label style={label}>Jam Selesai</label>
-                <input type="time" value={formData.endTime}
-                  onChange={(e) => handleChange("endTime", e.target.value)}
-                  style={inputStyle("endTime")} onFocus={focusBorder} onBlur={blurBorder("endTime")} />
-              </div>
-            </div>
-
-            {/* Ruangan + Status */}
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label style={label}>Ruangan / Lokasi</label>
-                <input type="text" value={formData.room}
-                  onChange={(e) => handleChange("room", e.target.value)}
-                  style={inputStyle("room")}
-                  placeholder="Misal: Lab Komputer 3"
-                  onFocus={focusBorder} onBlur={blurBorder("room")} />
-                {errors.room && <p className="text-xs mt-1" style={{ color: "#dc2626" }}>{errors.room}</p>}
-              </div>
-              <div>
-                <label style={label}>Status</label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => handleChange("status", e.target.value as ScheduleItem["status"])}
-                  style={{ ...inputStyle(""), cursor: "pointer" }}
-                  onFocus={focusBorder} onBlur={blurBorder("")}
-                >
-                  {["Akan Datang","Sedang Berlangsung","Selesai","Ditiadakan"].map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
-            </div>
-
-            {/* Catatan */}
-            <div>
-              <label style={label}>Catatan (Opsional)</label>
-              <textarea
-                rows={2} value={formData.notes || ""}
-                onChange={(e) => handleChange("notes", e.target.value)}
-                style={{ ...inputStyle(""), resize: "none" }}
-                placeholder="Misal: Bawa laptop, kuis bab 4..."
-                onFocus={focusBorder} onBlur={blurBorder("")}
-              />
+          {/* Category */}
+          <div>
+            <label style={labelStyle}>Kategori</label>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+              {[
+                { key: "kuliah", label: "Kuliah", icon: School, color: "#1A56DB", bg: "#EBF0FD" },
+                { key: "organisasi", label: "Organisasi", icon: Users, color: "#7C3AED", bg: "#EDE9FE" },
+                { key: "lainnya", label: "Lainnya", icon: Layers, color: "#059669", bg: "#D1FAE5" },
+              ].map((cat) => {
+                const Icon = cat.icon;
+                const active = category === cat.key;
+                return (
+                  <button
+                    key={cat.key}
+                    type="button"
+                    onClick={() => setCategory(cat.key)}
+                    style={{
+                      padding: "10px 8px",
+                      borderRadius: 10,
+                      border: active ? `2px solid ${cat.color}` : "2px solid #E5E7EB",
+                      background: active ? cat.bg : "#F9FAFB",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 4,
+                      cursor: "pointer",
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    <Icon size={16} color={active ? cat.color : "#9CA3AF"} />
+                    <span style={{ fontSize: 11, fontWeight: active ? 700 : 500, color: active ? cat.color : "#6B7280" }}>
+                      {cat.label}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Footer */}
-          <div
-            className="flex items-center justify-end gap-3 mt-5 pt-4"
-            style={{ borderTop: "1px solid #f1f3f8" }}
-          >
+          {/* Day */}
+          <div>
+            <label style={labelStyle}>Hari *</label>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              {DAYS.map((d) => (
+                <button
+                  key={d.key}
+                  type="button"
+                  onClick={() => setDay(d.key)}
+                  style={{
+                    padding: "6px 12px",
+                    borderRadius: 8,
+                    border: day === d.key ? "2px solid #1A56DB" : "1px solid #E5E7EB",
+                    background: day === d.key ? "#EBF0FD" : "#F9FAFB",
+                    fontSize: 12,
+                    fontWeight: day === d.key ? 700 : 500,
+                    color: day === d.key ? "#1A56DB" : "#6B7280",
+                    cursor: "pointer",
+                  }}
+                >
+                  {d.label}
+                </button>
+              ))}
+            </div>
+            {errors.day && <p style={errorTextStyle}>{errors.day}</p>}
+          </div>
+
+          {/* Time Range */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div>
+              <label style={labelStyle}>Mulai *</label>
+              <input
+                type="time"
+                value={startTime}
+                onChange={(e) => { setStartTime(e.target.value); setErrors((p) => ({ ...p, startTime: undefined, timeRange: undefined })); }}
+                style={errors.startTime || errors.timeRange ? errorInputStyle : inputStyle}
+              />
+              {errors.startTime && <p style={errorTextStyle}>{errors.startTime}</p>}
+            </div>
+            <div>
+              <label style={labelStyle}>Selesai *</label>
+              <input
+                type="time"
+                value={endTime}
+                onChange={(e) => { setEndTime(e.target.value); setErrors((p) => ({ ...p, endTime: undefined, timeRange: undefined })); }}
+                style={errors.endTime || errors.timeRange ? errorInputStyle : inputStyle}
+              />
+              {errors.endTime && <p style={errorTextStyle}>{errors.endTime}</p>}
+            </div>
+            {errors.timeRange && (
+              <div style={{ gridColumn: "1 / -1" }}>
+                <p style={errorTextStyle}>{errors.timeRange}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Location */}
+          <div>
+            <label style={labelStyle}>Lokasi / Ruangan</label>
+            <input
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="Contoh: Gedung A Lantai 3, Zoom, dll."
+              style={inputStyle}
+            />
+          </div>
+
+          {/* Priority */}
+          <div>
+            <label style={labelStyle}>Prioritas</label>
+            <div style={{ display: "flex", gap: 8 }}>
+              {["wajib", "fleksibel"].map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setPriority(p)}
+                  style={{
+                    flex: 1,
+                    padding: "8px",
+                    borderRadius: 10,
+                    border: priority === p ? (p === "wajib" ? "2px solid #EF4444" : "2px solid #F59E0B") : "2px solid #E5E7EB",
+                    background: priority === p ? (p === "wajib" ? "#FEF2F2" : "#FFFBEB") : "#F9FAFB",
+                    fontSize: 12,
+                    fontWeight: priority === p ? 700 : 500,
+                    color: priority === p ? (p === "wajib" ? "#DC2626" : "#D97706") : "#6B7280",
+                    cursor: "pointer",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {p === "wajib" ? "🔴 Wajib" : "🟡 Fleksibel"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Category-specific fields */}
+          {category === "kuliah" && (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 80px", gap: 12 }}>
+              <div>
+                <label style={labelStyle}>Dosen Pengampu</label>
+                <input
+                  value={lecturer}
+                  onChange={(e) => setLecturer(e.target.value)}
+                  placeholder="Nama dosen"
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>SKS</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={6}
+                  value={sks}
+                  onChange={(e) => setSks(e.target.value)}
+                  placeholder="3"
+                  style={inputStyle}
+                />
+              </div>
+            </div>
+          )}
+
+          {category === "organisasi" && (
+            <div>
+              <label style={labelStyle}>Peran / Jabatan</label>
+              <input
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                placeholder="Contoh: Ketua, Koordinator Divisi..."
+                style={inputStyle}
+              />
+            </div>
+          )}
+
+          {/* Notes */}
+          <div>
+            <label style={labelStyle}>Catatan (opsional)</label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Tambahan info atau pengingat..."
+              rows={2}
+              style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
+            />
+          </div>
+
+          {/* Action Buttons */}
+          <div style={{ display: "flex", gap: 10, paddingTop: 4 }}>
             <button
-              type="button" onClick={onClose}
-              className="px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer"
-              style={{ color: "#6b7280", background: "#f1f3f8", border: "1px solid #e8eaf0" }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#e8eaf0")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#f1f3f8")}
+              type="button"
+              onClick={onClose}
+              style={{ flex: 1, padding: "10px", borderRadius: 10, border: "1px solid #E5E7EB", background: "#F9FAFB", fontSize: 14, fontWeight: 600, color: "#6B7280", cursor: "pointer" }}
             >
               Batal
             </button>
             <button
-              type="submit" disabled={isSubmitting}
-              className="px-5 py-2 text-sm font-semibold rounded-lg transition-all cursor-pointer flex items-center gap-2 disabled:opacity-50"
-              style={{ background: "#4f46e5", color: "#ffffff", border: "none", boxShadow: "0 2px 8px rgba(79,70,229,0.3)" }}
-              onMouseEnter={(e) => !isSubmitting && (e.currentTarget.style.background = "#4338ca")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#4f46e5")}
+              type="submit"
+              disabled={submitting}
+              style={{
+                flex: 2,
+                padding: "10px",
+                borderRadius: 10,
+                border: "none",
+                background: submitting ? "#9CA3AF" : "#1A56DB",
+                color: "#FFFFFF",
+                fontSize: 14,
+                fontWeight: 700,
+                cursor: submitting ? "not-allowed" : "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                transition: "background 0.15s",
+              }}
             >
-              {isSubmitting ? (
-                <>
-                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4" />
-                    <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v8H4z" />
-                  </svg>
-                  Menyimpan...
-                </>
+              {submitting ? (
+                <><RefreshCw size={15} style={{ animation: "spin 1s linear infinite" }} /> Menyimpan...</>
               ) : (
-                <>
-                  <svg className="w-4 h-4" fill="none" stroke="white" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Simpan Perubahan
-                </>
+                <><Save size={15} /> Simpan Perubahan</>
               )}
             </button>
           </div>
         </form>
       </div>
+
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

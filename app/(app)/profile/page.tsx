@@ -1,8 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { DUMMY_USER } from "@/data/schedules";
 import { useScheduleStore } from "@/store/useScheduleStore";
+
+interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  nim?: string | null;
+  university?: string | null;
+  major?: string | null;
+  semester?: number | null;
+  createdAt: string;
+  scheduleCount: number;
+  conflictCount: number;
+  unresolvedConflicts: number;
+  schedulesByCategory?: Record<string, number>;
+}
 
 /* ─── small icon helpers (inline SVG, no extra dep) ─── */
 function IconRadar() {
@@ -206,21 +222,62 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
    MAIN PAGE
 ══════════════════════════════════════════════ */
 export default function ProfilePage() {
+  const router = useRouter();
   const { schedules, conflicts } = useScheduleStore();
   const [realtimeAlert, setRealtimeAlert] = useState(true);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await fetch("/api/users/me");
+        if (res.status === 401) {
+          router.replace("/login");
+          return;
+        }
+        if (res.ok) {
+          const data = await res.json();
+          setUserProfile(data.user);
+        }
+      } catch (err) {
+        console.error("Failed to load profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProfile();
+  }, [router]);
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.replace("/login");
+    } catch {
+      setLoggingOut(false);
+    }
+  }
 
   /* ── derived stats ── */
-  const totalSchedules = schedules.length;
-  const unresolvedConflicts = conflicts.length;
-  const conflictingIds = new Set(
-    conflicts.flatMap((c) => [c.scheduleA.id, c.scheduleB.id])
-  );
-  const safeCount = Math.max(0, totalSchedules - conflictingIds.size);
+  const totalSchedules = userProfile ? userProfile.scheduleCount : schedules.length;
+  const unresolvedConflicts = userProfile
+    ? userProfile.unresolvedConflicts
+    : conflicts.length;
+  const safeCount = Math.max(0, totalSchedules - unresolvedConflicts);
   const healthScore =
     totalSchedules === 0 ? 100 : Math.round((safeCount / totalSchedules) * 100);
 
   /* SVG circle health ring — values out of 100 */
   const dashArray = `${healthScore}, 100`;
+
+  const displayName = userProfile?.name || DUMMY_USER.name;
+  const displayNim = userProfile?.nim || DUMMY_USER.nim;
+  const displayUniversity = userProfile?.university || DUMMY_USER.university;
+  const displayMajor = userProfile?.major || DUMMY_USER.faculty;
+  const displaySemester = userProfile?.semester || DUMMY_USER.semester;
+  const initial = displayName.charAt(0).toUpperCase() || "U";
 
   const CUSTOM_CATEGORIES = [
     { label: "Kuliah",    bg: "#e0e7ff", color: "#3730a3" },
@@ -293,7 +350,7 @@ export default function ProfilePage() {
                 color: "var(--color-on-primary-fixed-variant)",
               }}
             >
-              {DUMMY_USER.name.charAt(0)}
+              {initial}
             </div>
             <div
               className="absolute -bottom-1 -right-1 w-6 h-6 min-w-6 min-h-6 rounded-full shrink-0 aspect-square flex items-center justify-center shadow"
@@ -313,53 +370,53 @@ export default function ProfilePage() {
 
           <div className="flex flex-col min-w-0 flex-1">
             <h2 className="text-[17px] font-bold leading-tight" style={{ color: "var(--color-on-surface)" }}>
-              {DUMMY_USER.name}
+              {displayName}
             </h2>
             <p className="text-xs mt-0.5 line-clamp-1" style={{ color: "var(--color-on-surface-variant)" }}>
-              S1 {DUMMY_USER.faculty} • {DUMMY_USER.university}
+              {displayMajor} • {displayUniversity}
             </p>
             <div className="flex items-center gap-2 mt-2 flex-wrap">
-              <span
-                className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md"
-                style={{ background: "var(--color-surface-low)", color: "var(--color-secondary)" }}
-              >
-                NIM {DUMMY_USER.nim}
-              </span>
+              {displayNim && (
+                <span
+                  className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md"
+                  style={{ background: "var(--color-surface-low)", color: "var(--color-secondary)" }}
+                >
+                  NIM {displayNim}
+                </span>
+              )}
               <span
                 className="text-[11px] font-bold px-2 py-0.5 rounded-full"
                 style={{ background: "var(--color-primary-fixed)", color: "var(--color-on-primary-fixed-variant)" }}
               >
-                Angkatan {DUMMY_USER.angkatan}
+                Semester {displaySemester}
               </span>
             </div>
           </div>
         </div>
 
-        {/* status row */}
+        {/* quick status row */}
         <div
-          className="flex items-center justify-between rounded-xl px-3 py-2"
+          className="flex items-center justify-between px-3 py-2 rounded-xl text-xs"
           style={{ background: "var(--color-surface-low)" }}
         >
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-            <span className="text-xs font-semibold" style={{ color: "var(--color-on-surface)" }}>
-              Semester {DUMMY_USER.semester} • Aktif
+            <span className="font-semibold" style={{ color: "var(--color-on-surface)" }}>
+              Semester {displaySemester} • Aktif
             </span>
           </div>
-          <span
-            className="text-[11px] font-bold flex items-center gap-1 cursor-pointer"
-            style={{ color: "var(--color-primary)" }}
-          >
-            SIAKAD
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+          <span className="text-[11px] font-semibold text-primary flex items-center gap-1 cursor-pointer hover:underline">
+            SIAKAD UI
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
             </svg>
           </span>
         </div>
       </div>
 
-      {/* ── Radar Health Score ── */}
+      {/* ── Radar Health Score Bento ── */}
       <div
         className="rounded-2xl p-4 flex flex-col gap-3 shadow-sm"
         style={{
@@ -367,39 +424,43 @@ export default function ProfilePage() {
           border: "1px solid var(--color-surface-high)",
         }}
       >
-        {/* header row */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-primary"><IconRadar /></span>
-            <span className="text-[15px] font-bold" style={{ color: "var(--color-on-surface)" }}>
+            <div
+              className="w-7 h-7 rounded-lg flex items-center justify-center text-primary"
+              style={{ background: "var(--color-primary-fixed)" }}
+            >
+              <IconRadar />
+            </div>
+            <span className="text-sm font-bold" style={{ color: "var(--color-on-surface)" }}>
               Radar Health Score
             </span>
           </div>
           <span
             className="text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1"
             style={{
-              background: unresolvedConflicts === 0 ? "#d1fae5" : "#fef9c3",
-              color: unresolvedConflicts === 0 ? "#065f46" : "#854d0e",
+              background: healthScore >= 80 ? "#d1fae5" : "#fee2e2",
+              color: healthScore >= 80 ? "#065f46" : "#991b1b",
             }}
           >
             <IconCheck />
-            {unresolvedConflicts === 0 ? "Optimal" : "Ada Konflik"}
+            {healthScore >= 90 ? "Optimal" : healthScore >= 70 ? "Baik" : "Perlu Evaluasi"}
           </span>
         </div>
 
-        {/* 3-col bento */}
-        <div className="grid grid-cols-3 gap-2">
-          {/* health ring */}
+        {/* 3 bento stat columns */}
+        <div className="grid grid-cols-3 gap-2.5 pt-1">
+          {/* Ring + score */}
           <div
-            className="flex flex-col items-center justify-center rounded-xl p-3 gap-1"
+            className="flex flex-col items-center justify-center py-3 px-2 rounded-xl"
             style={{ background: "var(--color-surface-low)" }}
           >
-            <div className="relative w-14 h-14 flex items-center justify-center">
-              <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+            <div className="relative w-12 h-12 flex items-center justify-center">
+              <svg className="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
                 <path
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   fill="none"
-                  stroke="var(--color-surface-variant)"
+                  stroke="var(--color-surface-high)"
                   strokeWidth="3.5"
                 />
                 <path
@@ -411,85 +472,87 @@ export default function ProfilePage() {
                   strokeLinecap="round"
                 />
               </svg>
-              <span
-                className="absolute text-xs font-extrabold"
-                style={{ color: "var(--color-primary)" }}
-              >
+              <span className="absolute font-mono text-xs font-extrabold text-primary">
                 {healthScore}%
               </span>
             </div>
-            <span className="text-[10px] font-semibold text-center" style={{ color: "var(--color-secondary)" }}>
+            <span className="text-[10px] font-medium text-secondary mt-1.5 text-center leading-tight">
               Bebas Bentrok
             </span>
           </div>
 
-          {/* total jadwal */}
+          {/* Jadwal Aktif */}
           <div
-            className="flex flex-col items-center justify-center rounded-xl p-3 gap-0.5"
+            className="flex flex-col items-center justify-center py-3 px-2 rounded-xl text-center"
             style={{ background: "var(--color-surface-low)" }}
           >
-            <span className="text-2xl font-extrabold" style={{ color: "var(--color-on-surface)" }}>
+            <span className="text-2xl font-extrabold text-on-surface">
               {totalSchedules}
             </span>
-            <span className="text-[10px] font-semibold text-center" style={{ color: "var(--color-secondary)" }}>
+            <span className="text-[10px] font-medium text-secondary mt-0.5 leading-tight">
               Jadwal Aktif
             </span>
-            <span className="text-[10px]" style={{ color: "var(--color-primary)" }}>
+            <span className="text-[9px] font-bold text-primary mt-1">
               Minggu ini
             </span>
           </div>
 
-          {/* konflik */}
+          {/* Konflik Selesai */}
           <div
-            className="flex flex-col items-center justify-center rounded-xl p-3 gap-0.5"
+            className="flex flex-col items-center justify-center py-3 px-2 rounded-xl text-center"
             style={{ background: "var(--color-surface-low)" }}
           >
-            <span
-              className="text-2xl font-extrabold"
-              style={{ color: unresolvedConflicts > 0 ? "var(--color-tertiary)" : "var(--color-on-surface)" }}
-            >
-              {unresolvedConflicts}
+            <div className="flex items-center gap-1">
+              <span
+                className="text-2xl font-extrabold"
+                style={{ color: unresolvedConflicts > 0 ? "var(--color-tertiary)" : "#059669" }}
+              >
+                {unresolvedConflicts}
+              </span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+            <span className="text-[10px] font-medium text-secondary mt-0.5 leading-tight">
+              Bentrokan
             </span>
-            <span className="text-[10px] font-semibold text-center" style={{ color: "var(--color-secondary)" }}>
-              Konflik
-            </span>
             <span
-              className="text-[10px]"
+              className="text-[9px] font-bold mt-1"
               style={{ color: unresolvedConflicts === 0 ? "#059669" : "var(--color-tertiary)" }}
             >
-              {unresolvedConflicts === 0 ? "100% Clear" : "Perlu ditangani"}
+              {unresolvedConflicts === 0 ? "100% Clear" : "Perlu Selesai"}
             </span>
           </div>
         </div>
       </div>
 
-      {/* ── Pengaturan Jadwal & Kalender ── */}
-      <SettingsGroup label="Pengaturan Jadwal & Kalender">
+      {/* ── Jadwal & Kalender Settings ── */}
+      <SettingsGroup label="Jadwal & Kalender">
         <SettingRow
           icon={<IconSchool />}
-          title="Kalender SIAKAD"
-          subtitle="Sinkronisasi mata kuliah otomatis"
+          title="Sinkronisasi SIAKAD"
+          subtitle="Terhubung otomatis ke portal akademik"
           right={
             <span
               className="text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1"
               style={{ background: "#d1fae5", color: "#065f46" }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-              Tersinkron
+              Aktif
             </span>
           }
         />
         <SettingRow
           icon={<IconCalendar />}
-          title="Google Calendar Sync"
-          subtitle={`user@${DUMMY_USER.university.toLowerCase().replace(/ /g, "")}.ac.id`}
+          title="Ekspor Kalender"
+          subtitle="Google Calendar, iCal (.ics)"
           right={
             <div className="flex items-center gap-1">
               <span
                 className="text-[11px] font-bold px-2.5 py-1 rounded-full"
-                style={{ background: "var(--color-primary-fixed)", color: "var(--color-on-primary-fixed-variant)" }}
+                style={{ background: "var(--color-surface-container)", color: "var(--color-on-surface-variant)" }}
               >
-                Aktif
+                .ICS
               </span>
               <span className="text-secondary"><IconChevron /></span>
             </div>
@@ -562,7 +625,9 @@ export default function ProfilePage() {
       {/* ── Logout ── */}
       <button
         type="button"
-        className="w-full h-12 rounded-2xl flex items-center justify-center gap-2 text-sm font-bold transition-all active:scale-[0.99] cursor-pointer"
+        onClick={handleLogout}
+        disabled={loggingOut}
+        className="w-full h-12 rounded-2xl flex items-center justify-center gap-2 text-sm font-bold transition-all active:scale-[0.99] cursor-pointer disabled:opacity-50"
         style={{
           background: "rgba(255,218,214,0.6)",
           color: "var(--color-error)",
@@ -572,7 +637,7 @@ export default function ProfilePage() {
         onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,218,214,0.6)")}
       >
         <IconLogout />
-        Keluar dari Akun
+        {loggingOut ? "Mengeluarkan akun..." : "Keluar dari Akun"}
       </button>
 
       {/* ── Footer ── */}
@@ -587,4 +652,4 @@ export default function ProfilePage() {
 
     </div>
   );
-}
+}
