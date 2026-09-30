@@ -1,5 +1,5 @@
 // KawanKampus Service Worker for Offline PWA Support
-const CACHE_NAME = "kawankampus-cache-v2";
+const CACHE_NAME = "kawankampus-cache-v3";
 
 // Core static assets guaranteed to be accessible
 const CORE_STATIC_ASSETS = [
@@ -29,7 +29,7 @@ self.addEventListener("install", (event) => {
       for (const route of OPTIONAL_ROUTES) {
         try {
           const res = await fetch(route);
-          if (res.ok && res.status === 200) {
+          if (res.ok && res.status === 200 && !res.redirected) {
             await cache.put(route, res);
           }
         } catch {
@@ -70,6 +70,9 @@ self.addEventListener("fetch", (event) => {
 
   // 1. API calls: Network-first, fallback to cache
   if (url.pathname.startsWith("/api/")) {
+    if (url.pathname.startsWith("/api/auth/") || url.pathname.startsWith("/api/users/")) {
+    return; // langsung ke network, tidak di-cache
+  }
     event.respondWith(
       fetch(event.request)
         .then((response) => {
