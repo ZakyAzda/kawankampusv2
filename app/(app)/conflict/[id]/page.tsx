@@ -4,6 +4,7 @@ import React, { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RefreshCw, AlertTriangle, CheckCircle, ArrowLeft } from "lucide-react";
+import { useDialog } from "@/components/ui/CustomDialog";
 
 interface Schedule {
   id: string;
@@ -67,6 +68,7 @@ const DAY_LABEL: Record<string, string> = {
 export default function ConflictDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
+  const { showAlert, showConfirm, dialogNode } = useDialog();
   const [conflict, setConflict] = useState<ConflictDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -94,14 +96,19 @@ export default function ConflictDetailPage({ params }: { params: Promise<{ id: s
   }, [id, router]);
 
   async function handleDeleteSchedule(scheduleId: string, name: string) {
-    if (!confirm(`Hapus "${name}" dari jadwal untuk menyelesaikan bentrokan?`)) return;
+    const confirmed = await showConfirm(
+      "Hapus Jadwal Ini?",
+      `"${name}" akan dihapus untuk menyelesaikan bentrokan. Tindakan ini tidak bisa dibatalkan.`,
+      { variant: "danger", confirmLabel: "Hapus", cancelLabel: "Batal" }
+    );
+    if (!confirmed) return;
     setDeletingId(scheduleId);
     try {
       const res = await fetch(`/api/schedules/${scheduleId}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Gagal menghapus jadwal");
       router.replace("/calendar");
     } catch (err: any) {
-      alert(err.message || "Gagal menghapus jadwal");
+      await showAlert("Gagal Menghapus", err.message || "Gagal menghapus jadwal", "danger");
       setDeletingId(null);
     }
   }
@@ -118,7 +125,7 @@ export default function ConflictDetailPage({ params }: { params: Promise<{ id: s
       setResolved(true);
       if (conflict) setConflict({ ...conflict, status: "resolved" });
     } catch (err: any) {
-      alert(err.message || "Gagal memperbarui status");
+      await showAlert("Gagal Memperbarui", err.message || "Gagal memperbarui status", "danger");
     } finally {
       setMarking(false);
     }
@@ -356,6 +363,9 @@ export default function ConflictDetailPage({ params }: { params: Promise<{ id: s
       </div>
 
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+
+      {/* Custom Dialog Portal */}
+      {dialogNode}
     </div>
   );
 }

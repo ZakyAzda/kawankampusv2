@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { DUMMY_USER } from "@/data/schedules";
 import { useScheduleStore } from "@/store/useScheduleStore";
+import { useDialog } from "@/components/ui/CustomDialog";
 
 interface UserProfile {
   id: string;
@@ -244,6 +245,7 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
 export default function ProfilePage() {
   const router = useRouter();
   const { schedules, conflicts } = useScheduleStore();
+  const { showConfirm, dialogNode } = useDialog();
   const [realtimeAlert, setRealtimeAlert] = useState(true);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -271,6 +273,12 @@ export default function ProfilePage() {
   }, [router]);
 
   async function handleLogout() {
+    const confirmed = await showConfirm(
+      "Keluar dari Akun?",
+      "Kamu akan keluar dari KawanKampus. Sesi aktifmu akan diakhiri.",
+      { variant: "warning", confirmLabel: "Keluar", cancelLabel: "Batal" }
+    );
+    if (!confirmed) return;
     setLoggingOut(true);
     try {
       await fetch("/api/auth/logout", { method: "POST" });
@@ -671,6 +679,8 @@ export default function ProfilePage() {
         </p>
       </div>
 
+      {/* Custom Dialog Portal */}
+      {dialogNode}
     </div>
   );
 }

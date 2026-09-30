@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
+import { useDialog } from "@/components/ui/CustomDialog";
 import {
   ChevronLeft,
   ChevronRight,
@@ -42,6 +43,7 @@ export default function CalendarPage() {
   const [conflicts, setConflicts] = useState<Conflict[]>([]);
   const [stats, setStats] = useState<ConflictStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const { showAlert, showConfirm, dialogNode } = useDialog();
 
   // Edit modal state
   const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
@@ -77,17 +79,22 @@ export default function CalendarPage() {
 
   // Handle delete schedule
   async function handleDelete(scheduleId: string, name: string) {
-    if (!confirm(`Hapus jadwal "${name}"? Tindakan ini tidak bisa dibatalkan.`)) return;
+    const confirmed = await showConfirm(
+      "Hapus Jadwal?",
+      `Jadwal "${name}" akan dihapus secara permanen. Tindakan ini tidak bisa dibatalkan.`,
+      { variant: "danger", confirmLabel: "Hapus", cancelLabel: "Batal" }
+    );
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/schedules/${scheduleId}`, { method: "DELETE" });
       if (res.ok) {
         await loadData(); // refresh data incl. conflicts
       } else {
         const data = await res.json();
-        alert(data.error || "Gagal menghapus jadwal");
+        await showAlert("Gagal Menghapus", data.error || "Gagal menghapus jadwal", "danger");
       }
     } catch {
-      alert("Terjadi kesalahan jaringan.");
+      await showAlert("Kesalahan Jaringan", "Terjadi kesalahan jaringan. Coba lagi.", "danger");
     }
   }
 
@@ -421,6 +428,9 @@ export default function CalendarPage() {
       onClose={() => { setIsEditModalOpen(false); setEditingSchedule(null); }}
       onSaved={handleEditSaved}
     />
+
+    {/* Custom Dialog Portal */}
+    {dialogNode}
     </>
   );
 }

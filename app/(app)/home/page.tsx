@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
+import { useDialog } from "@/components/ui/CustomDialog";
 import { useRouter } from "next/navigation";
 import {
   Calendar as CalendarIcon,
@@ -37,6 +38,7 @@ const DAY_NAMES_ID: Record<string, string> = {
 
 export default function HomePage() {
   const router = useRouter();
+  const { showAlert, showConfirm, dialogNode } = useDialog();
 
   const [user, setUser] = useState<UserProfile | null>(null);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -107,17 +109,22 @@ export default function HomePage() {
 
   // Handle delete schedule
   async function handleDelete(scheduleId: string, name: string) {
-    if (!confirm(`Hapus jadwal "${name}"? Tindakan ini tidak bisa dibatalkan.`)) return;
+    const confirmed = await showConfirm(
+      "Hapus Jadwal?",
+      `Jadwal "${name}" akan dihapus secara permanen. Tindakan ini tidak bisa dibatalkan.`,
+      { variant: "danger", confirmLabel: "Hapus", cancelLabel: "Batal" }
+    );
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/schedules/${scheduleId}`, { method: "DELETE" });
       if (res.ok) {
         await loadDashboardData();
       } else {
         const data = await res.json();
-        alert(data.error || "Gagal menghapus jadwal");
+        await showAlert("Gagal Menghapus", data.error || "Gagal menghapus jadwal", "danger");
       }
     } catch {
-      alert("Terjadi kesalahan jaringan.");
+      await showAlert("Kesalahan Jaringan", "Terjadi kesalahan jaringan. Coba lagi.", "danger");
     }
   }
 
@@ -453,6 +460,9 @@ export default function HomePage() {
         }}
         onSaved={handleEditSaved}
       />
+
+      {/* Custom Dialog Portal */}
+      {dialogNode}
     </div>
   );
 }
