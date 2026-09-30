@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { AlertTriangle, Info, CheckCircle, XCircle, X } from "lucide-react";
+import { createPortal } from "react-dom";
 
 export type DialogVariant = "info" | "warning" | "danger" | "success";
 
@@ -23,9 +24,9 @@ const VARIANT_MAP: Record<
   DialogVariant,
   { icon: React.ReactNode }
 > = {
-  info:    { icon: <Info className="w-6 h-6" /> },
+  info: { icon: <Info className="w-6 h-6" /> },
   warning: { icon: <AlertTriangle className="w-6 h-6" /> },
-  danger:  { icon: <XCircle className="w-6 h-6" /> },
+  danger: { icon: <XCircle className="w-6 h-6" /> },
   success: { icon: <CheckCircle className="w-6 h-6" /> },
 };
 
@@ -116,7 +117,7 @@ export default function CustomDialog({
   const v = VARIANT_MAP[variant];
   const s = VARIANT_STYLES[variant];
 
-  return (
+  const dialog = (
     <div
       style={{
         position: "fixed",
@@ -300,6 +301,7 @@ export default function CustomDialog({
       `}</style>
     </div>
   );
+  return createPortal(dialog, document.body);
 }
 
 export function useDialog() {
@@ -340,7 +342,7 @@ export function useDialog() {
         confirmLabel: opts?.confirmLabel ?? "Ya, Lanjutkan",
         cancelLabel: opts?.cancelLabel ?? "Batal",
         onConfirm: () => { setConfig(null); resolve(true); },
-        onCancel:  () => { setConfig(null); resolve(false); },
+        onCancel: () => { setConfig(null); resolve(false); },
       });
     });
   }
