@@ -267,7 +267,7 @@ export default function WeeklyPage() {
             {DAYS.map((day) => {
               const daySchedules = schedules.filter((s) => s.day === day);
               const dayConflicts = conflicts.filter(
-                (c) => c.status === "unresolved" && (c.scheduleA.day === day || c.scheduleB.day === day)
+                (c) => c.status === "unresolved" && (c.day === day || c.scheduleA?.day === day || c.scheduleB?.day === day)
               );
               const isToday = day === TODAY_KEY;
 

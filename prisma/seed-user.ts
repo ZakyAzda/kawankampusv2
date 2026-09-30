@@ -80,10 +80,8 @@ const items: Item[] = [
     location: "Panti Asuhan", role: "Relawan", priority: "fleksibel", isRoutine: false, note: "Jadwal tunggal, tanpa bentrok" },
 ];
 
-const STATUS_OVERRIDE: Record<string, { status: string; notes?: string }> = {
-  "Pemrograman Web Lanjut|Rapat Kecil BEM": { status: "resolved", notes: "Rapat BEM dipindah ke Jumat 10:00" },
-  "Latihan Basket UKM|Workshop UI/UX": { status: "ignored", notes: "Datang terlambat ke workshop" },
-};
+// Seluruh irisan waktu dianggap sebagai konflik aktif (unresolved) secara konsisten
+const STATUS_OVERRIDE: Record<string, { status: string; notes?: string }> = {};
 
 const toMin = (t: string) => {
   const [h, m] = t.split(":").map(Number);
