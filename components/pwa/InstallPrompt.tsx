@@ -1,42 +1,55 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download, X, Smartphone } from "lucide-react";
+import { Download, X, Smartphone, Share } from "lucide-react";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 }
 
+const DISMISS_KEY = "pwa_prompt_dismissed";
+const DISMISS_MS = 3 * 24 * 60 * 60 * 1000; // 3 hari
+
 export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return (
-      window.matchMedia("(display-mode: standalone)").matches ||
-      Boolean((window.navigator as unknown as { standalone?: boolean }).standalone)
-    );
-  });
+  const [platform, setPlatform] = useState<"android" | "ios" | null>(null);
 
   useEffect(() => {
-    if (isInstalled) return;
+    // Sudah terinstal / dibuka dari home screen -> jangan tampilkan
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      Boolean((window.navigator as unknown as { standalone?: boolean }).standalone);
+    if (isStandalone) return;
 
-    // Check if dismissed recently (within 3 days)
-    const dismissedTime = localStorage.getItem("pwa_prompt_dismissed");
-    if (dismissedTime && Date.now() - parseInt(dismissedTime, 10) < 3 * 24 * 60 * 60 * 1000) {
-      return;
+    // Sudah ditutup baru-baru ini -> jangan tampilkan
+    try {
+      const dismissedTime = localStorage.getItem(DISMISS_KEY);
+      if (dismissedTime && Date.now() - parseInt(dismissedTime, 10) < DISMISS_MS) {
+        return;
+      }
+    } catch {}
+
+    const ua = window.navigator.userAgent;
+    const isIos =
+      /iphone|ipad|ipod/i.test(ua) ||
+      (ua.includes("Mac") && window.navigator.maxTouchPoints > 1); // iPadOS
+
+    // iOS: tidak ada beforeinstallprompt, tampilkan panduan manual
+    if (isIos) {
+      const t = setTimeout(() => setPlatform("ios"), 1500);
+      return () => clearTimeout(t);
     }
 
+    // Android / Chrome
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setIsVisible(true);
+      setPlatform("android");
     };
 
     const handleAppInstalled = () => {
-      setIsInstalled(true);
-      setIsVisible(false);
+      setPlatform(null);
       setDeferredPrompt(null);
     };
 
@@ -56,19 +69,19 @@ export default function InstallPrompt() {
     const choiceResult = await deferredPrompt.userChoice;
 
     if (choiceResult.outcome === "accepted") {
-      setIsVisible(false);
+      setPlatform(null);
     }
     setDeferredPrompt(null);
   };
 
   const handleDismiss = () => {
-    setIsVisible(false);
-    localStorage.setItem("pwa_prompt_dismissed", Date.now().toString());
+    setPlatform(null);
+    try {
+      localStorage.setItem(DISMISS_KEY, Date.now().toString());
+    } catch {}
   };
 
-  if (isInstalled || !isVisible || !deferredPrompt) {
-    return null;
-  }
+  if (!platform) return null;
 
   return (
     <aside
@@ -84,27 +97,59 @@ export default function InstallPrompt() {
           <h3 className="text-sm font-semibold text-on-surface leading-tight">
             Pasang KawanKampus
           </h3>
-          <p className="text-xs text-secondary mt-1 leading-relaxed">
-            Akses deteksi jadwal bentrok lebih cepat langsung dari layar utama tanpa browser.
-          </p>
 
-          <div className="flex items-center gap-2 mt-3">
-            <button
-              type="button"
-              onClick={handleInstallClick}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-semibold hover:opacity-90 active:scale-95 transition-all shadow-sm cursor-pointer"
-            >
-              <Download className="w-3.5 h-3.5" />
-              Pasang Sekarang
-            </button>
-            <button
-              type="button"
-              onClick={handleDismiss}
-              className="px-2.5 py-1.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container text-xs transition-colors cursor-pointer"
-            >
-              Nanti Saja
-            </button>
-          </div>
+          {platform === "android" ? (
+            <>
+              <p className="text-xs text-secondary mt-1 leading-relaxed">
+                Akses deteksi jadwal bentrok lebih cepat langsung dari layar utama tanpa browser.
+              </p>
+              <div className="flex items-center gap-2 mt-3">
+                <button
+                  type="button"
+                  onClick={handleInstallClick}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-semibold hover:opacity-90 active:scale-95 transition-all shadow-sm cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  Pasang Sekarang
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDismiss}
+                  className="px-2.5 py-1.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container text-xs transition-colors cursor-pointer"
+                >
+                  Nanti Saja
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-xs text-secondary mt-1 leading-relaxed">
+                Tambahkan ke layar utama iPhone Anda agar terbuka seperti aplikasi:
+              </p>
+              <ol className="text-xs text-on-surface mt-2 space-y-1.5 list-decimal list-inside leading-relaxed">
+                <li>
+                  Tekan tombol{" "}
+                  <Share className="inline w-3.5 h-3.5 -mt-0.5 text-primary" />{" "}
+                  <b>Share</b> di Safari
+                </li>
+                <li>
+                  Pilih <b>Add to Home Screen</b>
+                </li>
+                <li>
+                  Tekan <b>Add</b>
+                </li>
+              </ol>
+              <div className="mt-3">
+                <button
+                  type="button"
+                  onClick={handleDismiss}
+                  className="px-2.5 py-1.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container text-xs transition-colors cursor-pointer"
+                >
+                  Nanti Saja
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
         <button
