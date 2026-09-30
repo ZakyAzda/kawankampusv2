@@ -1,0 +1,10 @@
+Repository Kawan Kampus
+
+GitHub Repository:
+https://github.com/ZakyAzda/kawankampusv2
+
+Branch kontribusi:
+feature/functional-test-alvin
+
+Pull Request:
+https://github.com/ZakyAzda/kawankampusv2/pull/2
