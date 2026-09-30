@@ -16,7 +16,7 @@ import {
   BellRing, 
   Zap
 } from "lucide-react";
-import { auth, googleProvider } from "@/lib/firebase";
+import { auth, googleProvider, isFirebaseConfigured } from "@/lib/firebase";
 import { signInWithPopup } from "firebase/auth";
 
 export default function LoginPage() {
@@ -31,6 +31,13 @@ export default function LoginPage() {
   async function handleGoogleSignIn() {
     setError("");
     setIsGoogleLoading(true);
+
+    if (!isFirebaseConfigured || !auth || !googleProvider) {
+      setError("Login Google belum dikonfigurasi (API Key Firebase belum diisi di file .env). Silakan gunakan Email / NIM dan Password.");
+      setIsGoogleLoading(false);
+      return;
+    }
+
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const fbUser = result.user;

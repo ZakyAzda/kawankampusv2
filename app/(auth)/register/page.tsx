@@ -21,7 +21,7 @@ import {
   Clock, 
   Layers
 } from "lucide-react";
-import { auth, googleProvider } from "@/lib/firebase";
+import { auth, googleProvider, isFirebaseConfigured } from "@/lib/firebase";
 import { signInWithPopup } from "firebase/auth";
 
 const POPULAR_UNIVERSITIES = [
@@ -54,6 +54,13 @@ export default function RegisterPage() {
   async function handleGoogleSignIn() {
     setError("");
     setIsGoogleLoading(true);
+
+    if (!isFirebaseConfigured || !auth || !googleProvider) {
+      setError("Pendaftaran Google belum dikonfigurasi (API Key Firebase belum diisi di file .env). Silakan mendaftar manual.");
+      setIsGoogleLoading(false);
+      return;
+    }
+
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const fbUser = result.user;

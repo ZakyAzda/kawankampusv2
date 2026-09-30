@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { DUMMY_USER } from "@/data/schedules";
 import { useScheduleStore } from "@/store/useScheduleStore";
 
@@ -134,32 +135,51 @@ function SettingRow({
   subtitle,
   right,
   last = false,
+  onClick,
+  href,
 }: {
   icon: React.ReactNode;
   title: string;
   subtitle?: string;
   right: React.ReactNode;
   last?: boolean;
+  onClick?: () => void;
+  href?: string;
 }) {
+  const content = (
+    <div
+      onClick={onClick}
+      className={`flex items-center justify-between px-4 py-3 transition-colors ${
+        onClick || href ? "cursor-pointer hover:bg-[var(--color-surface-container-low)]" : ""
+      }`}
+    >
+      <div className="flex items-center gap-3 min-w-0">
+        <div
+          className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-primary"
+          style={{ background: "var(--color-surface-container)" }}
+        >
+          {icon}
+        </div>
+        <div className="flex flex-col min-w-0">
+          <span className="text-sm font-semibold text-on-surface truncate">{title}</span>
+          {subtitle && (
+            <span className="text-xs text-secondary truncate mt-0.5">{subtitle}</span>
+          )}
+        </div>
+      </div>
+      <div className="shrink-0 ml-2">{right}</div>
+    </div>
+  );
+
   return (
     <>
-      <div className="flex items-center justify-between px-4 py-3 transition-colors">
-        <div className="flex items-center gap-3 min-w-0">
-          <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-primary"
-            style={{ background: "var(--color-surface-container)" }}
-          >
-            {icon}
-          </div>
-          <div className="flex flex-col min-w-0">
-            <span className="text-sm font-semibold text-on-surface truncate">{title}</span>
-            {subtitle && (
-              <span className="text-xs text-secondary truncate mt-0.5">{subtitle}</span>
-            )}
-          </div>
-        </div>
-        <div className="shrink-0 ml-2">{right}</div>
-      </div>
+      {href ? (
+        <Link href={href} style={{ textDecoration: "none" }}>
+          {content}
+        </Link>
+      ) : (
+        content
+      )}
       {!last && (
         <div className="h-px mx-4" style={{ background: "var(--color-surface-low)" }} />
       )}
@@ -612,6 +632,7 @@ export default function ProfilePage() {
         <SettingRow
           icon={<span className="text-secondary"><IconLock /></span>}
           title="Ganti Kata Sandi"
+          href="/profile/change-password"
           right={<span className="text-secondary"><IconChevron /></span>}
         />
         <SettingRow
