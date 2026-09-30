@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+@"
+# Kawan Kampus
 
-## Getting Started
+Kawan Kampus adalah aplikasi manajemen jadwal mahasiswa yang membantu pengguna mengatur jadwal kuliah dan kegiatan serta mendeteksi bentrok jadwal.
 
-First, run the development server:
+## Stack
 
-```bash
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS
+- Prisma ORM
+- MongoDB
+- Firebase
+- Zustand
+- bcryptjs
+- jose
+
+## Struktur Data
+
+Database menggunakan MongoDB dengan Prisma.
+
+Model utama:
+
+- User — data pengguna
+- Schedule — data jadwal/kegiatan
+- Conflict — data bentrok antar jadwal
+- Notification — notifikasi pengguna
+
+Relasi utama:
+
+User -> Schedule
+User -> Conflict
+User -> Notification
+
+Schedule -> Conflict (Schedule A / Schedule B)
+
+## Instalasi
+
+Clone repository:
+
+git clone https://github.com/ZakyAzda/kawankampusv2.git
+
+Masuk ke folder:
+
+cd kawankampusv2
+
+Install dependency:
+
+npm install
+
+Buat file `.env` berdasarkan `.env.example`.
+
+Isi minimal:
+
+DATABASE_URL="mongodb+srv://username:password@cluster.mongodb.net/kawankampus"
+JWT_SECRET="your-secret-key"
+
+## Menjalankan Aplikasi
+
+Development:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Kemudian buka:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Testing Collision Engine
 
-## Learn More
+Pengujian Collision Engine dapat dijalankan dengan:
 
-To learn more about Next.js, take a look at the following resources:
+npx tsx test_collision.ts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Functional Test P0 terdiri dari lima skenario:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- B-01 — No Conflict
+- B-02 — Exact Boundary
+- B-03 — Partial Overlap
+- B-04 — Containment
+- B-05 — Invalid Time Input
 
-## Deploy on Vercel
+Hasil pengujian saat dokumentasi dibuat:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5 PASS / 0 FAIL
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Build
+
+Untuk melakukan production build:
+
+npm run build
+
+Untuk menjalankan hasil production:
+
+npm run start
+
+## Batasan MVP
+
+- Sistem masih berfokus pada pengelolaan jadwal dan deteksi bentrok.
+- Beberapa konfigurasi layanan eksternal membutuhkan environment variable yang valid.
+- Pengujian yang tersedia saat ini masih berfokus pada Collision Engine.
+- Demo dan pengujian end-to-end aplikasi perlu dilengkapi sesuai kebutuhan reviewer.
+
+## Repository
+
+https://github.com/ZakyAzda/kawankampusv2
+"@ | Set-Content 02_README.md
