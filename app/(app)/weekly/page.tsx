@@ -117,8 +117,8 @@ export default function WeeklyPage() {
     conflicts
       .filter((c) => c.status === "unresolved")
       .forEach((c) => {
-        ids.add(c.scheduleA.id);
-        ids.add(c.scheduleB.id);
+        if (c.scheduleA?.id) ids.add(c.scheduleA.id);
+        if (c.scheduleB?.id) ids.add(c.scheduleB.id);
       });
     return ids;
   }, [conflicts]);

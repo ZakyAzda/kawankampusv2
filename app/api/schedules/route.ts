@@ -38,14 +38,17 @@ function checkOverlap(
 export async function GET(req: Request) {
   try {
     const session = await getSessionUser();
+    if (!session) {
+      return NextResponse.json({ error: "Belum terautentikasi" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const day = searchParams.get("day");
     const category = searchParams.get("category");
 
-    const whereClause: any = {};
-    if (session) {
-      whereClause.userId = session.userId;
-    }
+    const whereClause: any = {
+      userId: session.userId,
+    };
     if (day) {
       whereClause.day = day.toLowerCase();
     }
