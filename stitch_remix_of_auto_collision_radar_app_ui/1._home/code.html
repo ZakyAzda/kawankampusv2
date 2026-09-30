@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary": "#ffffff", "error-container": "#ffdad6", "inverse-primary": "#b4c5ff", "on-surface": "#131b2e", "primary": "#004ac6", "on-error": "#ffffff", "secondary": "#505f76", "surface": "#faf8ff", "on-primary-fixed-variant": "#003ea8", "on-primary": "#ffffff", "tertiary-container": "#cf2c30", "surface-variant": "#dae2fd", "tertiary-fixed-dim": "#ffb3ad", "tertiary-fixed": "#ffdad7", "surface-container-highest": "#dae2fd", "surface-container-lowest": "#ffffff", "on-surface-variant": "#434655", "primary-container": "#2563eb", "on-secondary-container": "#54647a", "on-secondary": "#ffffff", "surface-bright": "#faf8ff", "secondary-fixed-dim": "#b7c8e1", "surface-container-high": "#e2e7ff", "surface-dim": "#d2d9f4", "secondary-container": "#d0e1fb", "on-primary-container": "#eeefff", "on-tertiary-fixed-variant": "#930013", "error": "#ba1a1a", "on-secondary-fixed": "#0b1c30", "outline-variant": "#c3c6d7", "background": "#faf8ff", "primary-fixed-dim": "#b4c5ff", "on-background": "#131b2e", "surface-container": "#eaedff", "on-tertiary-container": "#ffecea", "primary-fixed": "#dbe1ff", "on-secondary-fixed-variant": "#38485d", "on-primary-fixed": "#00174b", "inverse-on-surface": "#eef0ff", "outline": "#737686", "surface-container-low": "#f2f3ff", "on-tertiary-fixed": "#410004", "tertiary": "#ab0b1c", "inverse-surface": "#283044", "surface-tint": "#0053db", "secondary-fixed": "#d3e4fe", "on-error-container": "#93000a" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter": "0.75rem", "space-xl": "1.5rem", "space-md": "0.75rem", "space-sm": "0.5rem", "space-lg": "1rem", "margin": "1rem", "space-xs": "0.25rem" }, fontFamily: { "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-md": ["Inter"], "label-sm": ["Inter"], "body-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "time-tabular": ["Inter"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, fontSize: { "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.015em", fontWeight: "700" }], "body-lg": ["15px", { lineHeight: "22px", fontWeight: "400" }], "headline-sm": ["17px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "600" }], "body-md": ["13px", { lineHeight: "18px", fontWeight: "400" }], "title-md": ["15px", { lineHeight: "20px", fontWeight: "600" }], "time-tabular": ["13px", { lineHeight: "16px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "700" }] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;font-family:'Plus Jakarta Sans',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Auto-Collision Radar Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VaEK6_FmpxxxfVWGa-wjLnbPaNs2BVWoYSR0SkRPK798UZT0WcLzrUJIoaYArwikP3RVyY_EYT88E0h8HjOT-CybAIUDfRiod6mKPk_HY29QIHkII9zFYgr1zH8VHECRP2Q4-exMiA3LV1poe5GZoB0ngpvUYosmnvlUtBdLF0m23LKFrT2aJLYk7kKBZuTBIK3snLYU8v4m0VAkQhnaGWOb4G92AS_bDTNFycrWn8-6HkZiRGwB95RjQ"/><div class="flex flex-col"><span class="font-label-sm text-label-sm text-secondary tracking-wider uppercase">Collision Radar</span><h1 class="font-title-md text-title-md text-on-surface leading-none">Home</h1></div></div><div class="flex items-center gap-space-sm"><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-full text-secondary hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col flex-1 relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full">
+<!-- Interactive Top Greeting & Radar Status -->
+<section class="px-margin pt-space-md pb-space-lg flex flex-col gap-space-md">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Halo, Dimas!</h2>
+<span class="text-xl animate-bounce">👋</span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-0.5">Semester 5 • Teknik Informatika</p>
+</div>
+<!-- Date Badge -->
+<div class="bg-surface-container-high px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[15px]">calendar_today</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">24 Okt 2024</span>
+</div>
+</div>
+<!-- Active Radar Pulse Ribbon -->
+<div class="bg-surface-container-lowest px-3.5 py-2 rounded-xl flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Radar Aktif • Mendeteksi Otomatis</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">Sinkron Terakhir 09:41</span>
+</div>
+</section>
+<!-- Hero Conflict Warning Bento Card -->
+<section class="px-margin mb-space-lg">
+<div class="bg-tertiary-fixed rounded-2xl p-space-lg flex flex-col gap-space-md relative overflow-hidden shadow-sm">
+<!-- Decorative Backdrop Element -->
+<div class="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-tertiary-fixed-dim/40 blur-xl pointer-events-none"></div>
+<!-- Header Alert Strip -->
+<div class="flex items-center justify-between z-10">
+<div class="flex items-center gap-2">
+<span class="w-8 h-8 rounded-xl bg-tertiary-container text-on-tertiary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[19px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-tertiary-fixed font-bold leading-tight">2 Konflik Jadwal Terdeteksi!</h3>
+<p class="font-body-sm text-body-sm text-on-tertiary-fixed-variant">Potensi tumpang tindih waktu teridentifikasi hari ini</p>
+</div>
+</div>
+</div>
+<!-- Quick Metrics Grid -->
+<div class="grid grid-cols-3 gap-2 z-10 pt-1">
+<div class="bg-surface-container-lowest/90 backdrop-blur-sm p-2.5 rounded-xl flex flex-col shadow-sm">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">14</span>
+<span class="font-label-sm text-label-sm text-secondary">Minggu Ini</span>
+</div>
+<div class="bg-tertiary-container p-2.5 rounded-xl flex flex-col shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-tertiary font-bold">2</span>
+<span class="material-symbols-outlined text-on-tertiary text-[16px] animate-pulse">crisis_alert</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-tertiary-container font-semibold">Bentrok!</span>
+</div>
+<div class="bg-surface-container-lowest/90 backdrop-blur-sm p-2.5 rounded-xl flex flex-col shadow-sm">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">32j</span>
+<span class="font-label-sm text-label-sm text-secondary">Total Durasi</span>
+</div>
+</div>
+<!-- Resolution Action Link -->
+<a class="flex items-center justify-between pt-2 border-t-0 z-10 group cursor-pointer" href="#conflict-section">
+<span class="font-title-md text-title-md text-tertiary font-bold group-hover:underline">Lihat &amp; Selesaikan Bentrokan Sekarang</span>
+<span class="w-7 h-7 rounded-full bg-tertiary-container text-on-tertiary flex items-center justify-center group-hover:translate-x-1 transition-transform">
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</span>
+</a>
+</div>
+</section>
+<!-- Big Primary Action Button -->
+<section class="px-margin mb-space-xl">
+<button class="w-full bg-primary hover:bg-primary-container active:scale-[0.98] transition-all p-space-lg rounded-2xl flex items-center justify-between text-left text-on-primary shadow-md" id="quickAddBtn">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-on-primary/15 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary text-[28px]">add_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-primary font-bold">+ Tambah Jadwal Baru</span>
+<span class="font-body-sm text-body-sm text-on-primary-container/80">Input kuliah, rapat tim, atau agenda mandiri</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-primary text-[22px] opacity-75">chevron_right</span>
+</button>
+</section>
+<!-- Today's Schedule Agenda Header & Legend -->
+<section class="px-margin mb-space-md flex flex-col gap-space-sm" id="conflict-section">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">event_note</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Jadwal Hari Ini</h3>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2.5 py-1 rounded-full">4 Kegiatan</span>
+</div>
+<!-- Category Pill Legend -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1">
+<span class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded-full font-label-sm text-label-sm shrink-0 flex items-center gap-1 font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+        Kuliah
+      </span>
+<span class="bg-secondary-container text-on-secondary-fixed-variant px-2.5 py-1 rounded-full font-label-sm text-label-sm shrink-0 flex items-center gap-1 font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+        Organisasi
+      </span>
+<span class="bg-surface-container-high text-on-surface-variant px-2.5 py-1 rounded-full font-label-sm text-label-sm shrink-0 flex items-center gap-1 font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+        Lainnya
+      </span>
+</div>
+</section>
+<!-- Timeline Cards Stack -->
+<section class="px-margin flex flex-col gap-space-md mb-space-xl">
+<!-- Agenda Item 1: Aman -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg flex items-start gap-space-md shadow-sm">
+<div class="flex flex-col items-center shrink-0 w-12 pt-0.5">
+<span class="font-time-tabular text-time-tabular text-on-surface font-bold">08.00</span>
+<span class="font-label-sm text-label-sm text-secondary">10.30</span>
+</div>
+<div class="w-1 self-stretch bg-surface-container-high rounded-full"></div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1 mb-1">
+<span class="bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded-full font-label-sm text-label-sm">Kuliah</span>
+<div class="flex items-center gap-1 bg-surface-container px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-primary text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Aman</span>
+</div>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface truncate">Pemrograman Web Lanjut</h4>
+<div class="flex items-center gap-1 text-secondary mt-1">
+<span class="material-symbols-outlined text-[15px]">meeting_room</span>
+<span class="font-body-sm text-body-sm">R. Lab 3 • Gd. Informatika</span>
+</div>
+</div>
+</div>
+<!-- Conflict Pairing Container (Linked Clashes) -->
+<div class="bg-tertiary-fixed rounded-2xl p-space-md flex flex-col gap-space-sm shadow-md">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary text-[18px]">motion_photos_on</span>
+<span class="font-label-sm text-label-sm text-on-tertiary-fixed font-bold tracking-wide uppercase">Bentrok Waktu Terdeteksi</span>
+</div>
+<span class="bg-tertiary text-on-tertiary font-label-sm text-label-sm px-2 py-0.5 rounded-full font-semibold">Tumpang Tindih 60 Menit</span>
+</div>
+<!-- Agenda Item 2: Kecerdasan Buatan (Bentrok 1) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md flex items-start gap-space-md shadow-sm">
+<div class="flex flex-col items-center shrink-0 w-12 pt-0.5">
+<span class="font-time-tabular text-time-tabular text-tertiary font-bold">13.00</span>
+<span class="font-label-sm text-label-sm text-secondary">15.00</span>
+</div>
+<div class="w-1 self-stretch bg-tertiary-container rounded-full"></div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1 mb-1">
+<span class="bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded-full font-label-sm text-label-sm">Kuliah</span>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">Konflik 1</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface truncate">Kecerdasan Buatan</h4>
+<div class="flex items-center gap-1 text-secondary mt-1">
+<span class="material-symbols-outlined text-[15px]">room</span>
+<span class="font-body-sm text-body-sm">Ruang Kuliah 402</span>
+</div>
+</div>
+</div>
+<!-- Agenda Item 3: Rapat BEM (Bentrok 2) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md flex items-start gap-space-md shadow-sm">
+<div class="flex flex-col items-center shrink-0 w-12 pt-0.5">
+<span class="font-time-tabular text-time-tabular text-tertiary font-bold">14.00</span>
+<span class="font-label-sm text-label-sm text-secondary">16.00</span>
+</div>
+<div class="w-1 self-stretch bg-tertiary-container rounded-full"></div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1 mb-1">
+<span class="bg-secondary-container text-on-secondary-fixed-variant px-2 py-0.5 rounded-full font-label-sm text-label-sm">Organisasi</span>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">Konflik 2</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface truncate">Rapat Divisi Acara BEM</h4>
+<div class="flex items-center gap-1 text-secondary mt-1">
+<span class="material-symbols-outlined text-[15px]">diversity_3</span>
+<span class="font-body-sm text-body-sm">Selasar Rektorat</span>
+</div>
+</div>
+</div>
+<!-- Resolution Quick Drawer CTA inside conflict card -->
+<div class="bg-surface-container-lowest/80 backdrop-blur-sm rounded-xl p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary text-[17px]">sync_problem</span>
+<span class="font-body-sm text-body-sm text-on-tertiary-fixed font-medium">14.00 - 15.00 jadwal bertubrukan</span>
+</div>
+<button class="bg-primary hover:bg-primary-container active:scale-95 transition-all text-on-primary px-3 py-1 rounded-lg font-label-sm text-label-sm font-semibold shadow-sm">
+          Atur Ulang
+        </button>
+</div>
+</div>
+<!-- Agenda Item 4: Belajar Kelompok (Lainnya) -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg flex items-start gap-space-md shadow-sm">
+<div class="flex flex-col items-center shrink-0 w-12 pt-0.5">
+<span class="font-time-tabular text-time-tabular text-on-surface font-bold">16.30</span>
+<span class="font-label-sm text-label-sm text-secondary">18.00</span>
+</div>
+<div class="w-1 self-stretch bg-surface-container-high rounded-full"></div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1 mb-1">
+<span class="bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label-sm text-label-sm">Lainnya</span>
+<div class="flex items-center gap-1 bg-surface-container px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-primary text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Aman</span>
+</div>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface truncate">Belajar Kelompok Algoritma</h4>
+<div class="flex items-center gap-1 text-secondary mt-1">
+<span class="material-symbols-outlined text-[15px]">local_library</span>
+<span class="font-body-sm text-body-sm">Perpustakaan Pusat Lantai 2</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Motivational Productivity Card -->
+<section class="px-margin mb-space-lg">
+<div class="bg-surface-container-low rounded-2xl p-space-lg flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">insights</span>
+</div>
+<div class="flex flex-col flex-1">
+<h5 class="font-title-md text-title-md text-on-surface">Tips Efisiensi Jadwal</h5>
+<p class="font-body-sm text-body-sm text-secondary">Geser jadwal rapat BEM ke slot 16.00 untuk mengeliminasi bentrok tanpa izin kuliah.</p>
+</div>
+</div>
+</section>
+</div>
+<script>
+  // Micro-interaction for Quick Add & Conflict Anchor
+  document.getElementById('quickAddBtn')?.addEventListener('click', () => {
+    const fab = document.querySelector('a[data-path="add-schedule"]');
+    if (fab) {
+      fab.classList.add('scale-125');
+      setTimeout(() => fab.classList.remove('scale-125'), 200);
+      fab.click();
+    }
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.05)]" data-active-classes="text-primary font-bold"><div class="flex items-center justify-around h-16 px-space-xs relative"><a aria-current="page" class="flex flex-col items-center justify-center w-14 h-full gap-0.5 transition-all text-primary font-bold" data-path="home" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center w-14 h-full gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="calendar" href="#"><span class="material-symbols-outlined text-[24px]">calendar_month</span><span class="font-label-sm text-label-sm">Calendar</span></a><div class="flex items-center justify-center -mt-5"><a aria-label="Add Schedule" class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-[0_4px_14px_rgba(0,74,198,0.35)] active:scale-95 transition-transform" data-path="add-schedule" href="#"><span class="material-symbols-outlined text-[26px]">add</span></a></div><a class="flex flex-col items-center justify-center w-14 h-full gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="weekly-overview" href="#"><span class="material-symbols-outlined text-[24px]">view_week</span><span class="font-label-sm text-label-sm">Weekly</span></a><a class="flex flex-col items-center justify-center w-14 h-full gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="profile" href="#"><span class="material-symbols-outlined text-[24px]">account_circle</span><span class="font-label-sm text-label-sm">Profile</span></a></div></nav></body></html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#004ac6",
+            "inverse-primary": "#b4c5ff",
+            "on-primary": "#ffffff",
+            "outline-variant": "#c3c6d7",
+            "on-tertiary-fixed": "#410004",
+            "surface-tint": "#0053db",
+            "on-primary-fixed-variant": "#003ea8",
+            "surface-dim": "#d2d9f4",
+            "on-secondary": "#ffffff",
+            "on-surface-variant": "#434655",
+            "on-tertiary-fixed-variant": "#930013",
+            "surface-variant": "#dae2fd",
+            "on-error-container": "#93000a",
+            "primary-fixed": "#dbe1ff",
+            "on-error": "#ffffff",
+            "on-primary-container": "#eeefff",
+            "secondary-container": "#d0e1fb",
+            "tertiary": "#ab0b1c",
+            "on-secondary-fixed-variant": "#38485d",
+            "primary-fixed-dim": "#b4c5ff",
+            "on-tertiary-container": "#ffecea",
+            "inverse-surface": "#283044",
+            "error-container": "#ffdad6",
+            "on-surface": "#131b2e",
+            "surface": "#faf8ff",
+            "tertiary-fixed-dim": "#ffb3ad",
+            "surface-container-low": "#f2f3ff",
+            "error": "#ba1a1a",
+            "on-primary-fixed": "#00174b",
+            "outline": "#737686",
+            "on-background": "#131b2e",
+            "primary-container": "#2563eb",
+            "inverse-on-surface": "#eef0ff",
+            "secondary": "#505f76",
+            "on-secondary-container": "#54647a",
+            "tertiary-container": "#cf2c30",
+            "surface-bright": "#faf8ff",
+            "secondary-fixed": "#d3e4fe",
+            "background": "#faf8ff",
+            "secondary-fixed-dim": "#b7c8e1",
+            "on-secondary-fixed": "#0b1c30",
+            "on-tertiary": "#ffffff",
+            "surface-container": "#eaedff",
+            "surface-container-high": "#e2e7ff",
+            "tertiary-fixed": "#ffdad7",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-highest": "#dae2fd"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "gutter": "0.75rem",
+            "space-xl": "1.5rem",
+            "space-md": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem"
+          },
+          fontFamily: {
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "body-md": ["Plus Jakarta Sans", "sans-serif"],
+            "title-md": ["Plus Jakarta Sans", "sans-serif"],
+            "time-tabular": ["Inter", "sans-serif"],
+            "body-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          fontSize: {
+            "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.015em", fontWeight: "700" }],
+            "body-lg": ["15px", { lineHeight: "22px", fontWeight: "400" }],
+            "headline-sm": ["17px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "600" }],
+            "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "600" }],
+            "body-md": ["13px", { lineHeight: "18px", fontWeight: "400" }],
+            "title-md": ["15px", { lineHeight: "20px", fontWeight: "600" }],
+            "time-tabular": ["13px", { lineHeight: "16px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+            "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "700" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    @layer base {
+      html, body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #faf8ff;
+      }
+      body {
+        overscroll-behavior: none;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<meta content="mobile_stack" name="shell-type"/>
+</head>
+<body class="bg-surface text-on-surface flex flex-col min-h-screen">
+<!-- Top App Bar Navigation Header (Matching SCREEN_10 design) -->
+<header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-md border-b border-surface-container pt-safe">
+<div class="h-16 px-margin flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Go back" class="w-10 h-10 -ml-1.5 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container active:scale-95 transition-all" onclick="history.back()">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<div>
+<h1 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Tambah Jadwal Baru</h1>
+<p class="font-label-sm text-label-sm text-secondary leading-none mt-0.5">Auto-Collision Radar</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button aria-label="Info Radar" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">radar</span>
+</button>
+<div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-xs shadow-sm">
+<span class="material-symbols-outlined text-[18px]">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Form Content -->
+<main class="flex flex-col flex-1 relative w-full pt-20 pb-safe bg-surface">
+<div class="flex flex-col w-full max-w-[420px] mx-auto px-margin pt-space-xs pb-space-xl gap-space-lg">
+<!-- Top Visual Radar Status Pill -->
+<div class="flex items-center justify-between bg-error-container/20 border border-error/20 px-space-md py-2 rounded-full">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-error"></span>
+</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold tracking-wide">Radar Validasi Waktu</span>
+</div>
+<span class="font-label-sm text-label-sm text-error bg-error-container/60 px-2.5 py-0.5 rounded-full font-bold">1 Masalah Terdeteksi</span>
+</div>
+<!-- Collision Alert Card (Error Summary) -->
+<div class="relative overflow-hidden bg-error-container/30 border border-error/30 rounded-2xl p-4 shadow-sm">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-error rounded-l-2xl"></div>
+<div class="flex items-start gap-3 pl-1">
+<div class="w-8 h-8 rounded-full bg-error/10 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-error text-[20px]" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<p class="font-title-md text-title-md text-on-surface font-bold">Rentang Waktu Terbalik</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+              Durasi tidak valid: Jam selesai mendahului jam mulai (<span class="text-error font-bold font-time-tabular text-time-tabular">-2 jam</span>).
+            </p>
+</div>
+</div>
+</div>
+<!-- Form Section Container -->
+<form class="flex flex-col gap-space-lg" onsubmit="event.preventDefault();">
+<!-- Field 1: Nama Kegiatan -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center justify-between" for="event-title">
+<span>Nama Kegiatan <span class="text-error">*</span></span>
+<span class="font-label-sm text-label-sm text-primary flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Valid
+            </span>
+</label>
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container-lowest border border-outline-variant/50 text-on-surface font-body-lg text-body-lg rounded-xl px-space-md py-3 pl-11 shadow-sm focus:outline-none focus:border-primary transition-all" id="event-title" readonly="" type="text" value="Rapat Evaluasi Organisasi"/>
+<span class="material-symbols-outlined absolute left-3.5 text-secondary text-[20px]">badge</span>
+</div>
+</div>
+<!-- Field 2: Kategori Kegiatan -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface">Kategori Kegiatan <span class="text-error">*</span></label>
+<div class="grid grid-cols-3 gap-2">
+<!-- Kuliah Pill -->
+<button class="flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 shadow-sm hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-secondary text-[20px] mb-1">menu_book</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Kuliah</span>
+</button>
+<!-- Organisasi Pill (Active Selection) -->
+<button class="relative flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-secondary-container border-2 border-primary shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-primary text-[20px] mb-1" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="font-label-sm text-label-sm text-on-secondary-fixed font-bold">Organisasi</span>
+<div class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-primary rounded-full flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-on-primary text-[13px] font-bold">check</span>
+</div>
+</button>
+<!-- Lainnya Pill -->
+<button class="flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 shadow-sm hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-secondary text-[20px] mb-1">more_horiz</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Lainnya</span>
+</button>
+</div>
+</div>
+<!-- Field 3: Tanggal Kegiatan -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="event-date">Tanggal Kegiatan <span class="text-error">*</span></label>
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container-lowest border border-outline-variant/50 text-on-surface font-body-lg text-body-lg rounded-xl px-space-md py-3 pl-11 pr-10 shadow-sm focus:outline-none focus:border-primary transition-all" id="event-date" readonly="" type="text" value="Sabtu, 24 Oktober 2026"/>
+<span class="material-symbols-outlined absolute left-3.5 text-secondary text-[20px]">calendar_today</span>
+<span class="material-symbols-outlined absolute right-3.5 text-outline text-[20px]">expand_more</span>
+</div>
+</div>
+<!-- Field 4: Waktu Pelaksanaan (Error State with Red Highlighting) -->
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface">Waktu Pelaksanaan <span class="text-error">*</span></span>
+<div class="grid grid-cols-2 gap-space-md">
+<!-- Jam Mulai -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-secondary" for="start-time">Jam Mulai</label>
+<div class="relative flex items-center bg-surface-container-lowest border border-outline-variant/50 rounded-xl shadow-sm">
+<input class="w-full bg-transparent font-time-tabular text-time-tabular text-on-surface py-3 pl-10 pr-2 rounded-xl focus:outline-none" id="start-time" readonly="" type="text" value="15.00"/>
+<span class="material-symbols-outlined absolute left-3 text-secondary text-[18px]">schedule</span>
+</div>
+</div>
+<!-- Jam Selesai (Invalid Error State) -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-error font-bold flex items-center justify-between" for="end-time">
+<span>Jam Selesai</span>
+<span class="material-symbols-outlined text-error text-[14px]">priority_high</span>
+</label>
+<div class="relative flex items-center bg-error-container/30 border-2 border-error rounded-xl shadow-sm">
+<input class="w-full bg-transparent font-time-tabular text-time-tabular text-error font-bold py-3 pl-10 pr-9 rounded-xl focus:outline-none" id="end-time" readonly="" type="text" value="13.00"/>
+<span class="material-symbols-outlined absolute left-3 text-error text-[18px]">schedule</span>
+<span class="material-symbols-outlined absolute right-2.5 text-error text-[18px]" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+</div>
+</div>
+<!-- Inline Error Message -->
+<div class="flex items-center gap-1.5 px-1 pt-0.5">
+<span class="material-symbols-outlined text-error text-[16px] shrink-0">cancel</span>
+<p class="font-body-sm text-body-sm text-error font-semibold leading-tight">
+              Jam selesai harus lebih besar dari jam mulai.
+            </p>
+</div>
+<!-- Collision / Reverse Time Visual Timeline Bar -->
+<div class="bg-surface-container-low border border-surface-container-high p-space-sm rounded-xl flex items-center justify-between text-on-surface-variant mt-0.5">
+<div class="flex items-center gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-secondary"></div>
+<span class="font-time-tabular text-time-tabular text-on-surface font-medium">15.00</span>
+</div>
+<div class="flex-1 mx-3 flex items-center">
+<div class="h-1 w-full bg-error-container relative flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-error text-[14px] rotate-180">arrow_forward</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-time-tabular text-time-tabular text-error font-bold">13.00</span>
+<div class="w-2.5 h-2.5 rounded-full bg-error"></div>
+</div>
+</div>
+</div>
+<!-- Field 5: Lokasi / Ruangan -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center justify-between" for="location">
+<span>Lokasi / Ruangan</span>
+<span class="font-label-sm text-label-sm text-outline">Opsional</span>
+</label>
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container-lowest border border-outline-variant/50 text-on-surface font-body-lg text-body-lg rounded-xl px-space-md py-3 pl-11 shadow-sm focus:outline-none focus:border-primary transition-all" id="location" readonly="" type="text" value="Ruang Rapat BEM / Zoom"/>
+<span class="material-symbols-outlined absolute left-3.5 text-secondary text-[20px]">pin_drop</span>
+</div>
+</div>
+<!-- Quick Smart Suggestion Tip -->
+<div class="bg-surface-container border border-surface-container-high rounded-xl p-space-md flex items-start gap-space-sm shadow-sm">
+<div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-primary text-[18px]">tips_and_updates</span>
+</div>
+<div class="flex flex-col">
+<p class="font-title-md text-title-md text-on-surface font-semibold">Saran Penyesuaian</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-snug">
+              Ubah jam selesai menjadi minimal <span class="font-time-tabular text-time-tabular text-primary font-bold">16.00</span> atau sesuaikan jam mulai rapat.
+            </p>
+</div>
+</div>
+<!-- Action Button Dock -->
+<div class="pt-2 flex flex-col gap-2">
+<button aria-disabled="true" class="w-full min-h-[50px] py-3.5 px-space-md bg-surface-dim text-outline font-title-md text-title-md rounded-xl cursor-not-allowed flex items-center justify-center gap-2 shadow-none select-none transition-all" disabled="" type="button">
+<span class="material-symbols-outlined text-[20px]">block</span>
+<span>Simpan Jadwal</span>
+</button>
+<div class="flex items-center justify-center gap-1.5 text-center">
+<span class="material-symbols-outlined text-outline text-[14px]">info</span>
+<span class="font-label-sm text-label-sm text-outline font-medium">Perbaiki waktu sebelum menyimpan</span>
+</div>
+</div>
+</form>
+</div>
+</main>
+</body></html>

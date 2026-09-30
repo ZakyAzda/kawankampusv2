@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary": "#ffffff", "error-container": "#ffdad6", "inverse-primary": "#b4c5ff", "on-surface": "#131b2e", "primary": "#004ac6", "on-error": "#ffffff", "secondary": "#505f76", "surface": "#faf8ff", "on-primary-fixed-variant": "#003ea8", "on-primary": "#ffffff", "tertiary-container": "#cf2c30", "surface-variant": "#dae2fd", "tertiary-fixed-dim": "#ffb3ad", "tertiary-fixed": "#ffdad7", "surface-container-highest": "#dae2fd", "surface-container-lowest": "#ffffff", "on-surface-variant": "#434655", "primary-container": "#2563eb", "on-secondary-container": "#54647a", "on-secondary": "#ffffff", "surface-bright": "#faf8ff", "secondary-fixed-dim": "#b7c8e1", "surface-container-high": "#e2e7ff", "surface-dim": "#d2d9f4", "secondary-container": "#d0e1fb", "on-primary-container": "#eeefff", "on-tertiary-fixed-variant": "#930013", "error": "#ba1a1a", "on-secondary-fixed": "#0b1c30", "outline-variant": "#c3c6d7", "background": "#faf8ff", "primary-fixed-dim": "#b4c5ff", "on-background": "#131b2e", "surface-container": "#eaedff", "on-tertiary-container": "#ffecea", "primary-fixed": "#dbe1ff", "on-secondary-fixed-variant": "#38485d", "on-primary-fixed": "#00174b", "inverse-on-surface": "#eef0ff", "outline": "#737686", "surface-container-low": "#f2f3ff", "on-tertiary-fixed": "#410004", "tertiary": "#ab0b1c", "inverse-surface": "#283044", "surface-tint": "#0053db", "secondary-fixed": "#d3e4fe", "on-error-container": "#93000a" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter": "0.75rem", "space-xl": "1.5rem", "space-md": "0.75rem", "space-sm": "0.5rem", "space-lg": "1rem", "margin": "1rem", "space-xs": "0.25rem" }, fontFamily: { "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-md": ["Inter"], "label-sm": ["Inter"], "body-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "time-tabular": ["Inter"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, fontSize: { "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.015em", fontWeight: "700" }], "body-lg": ["15px", { lineHeight: "22px", fontWeight: "400" }], "headline-sm": ["17px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "600" }], "body-md": ["13px", { lineHeight: "18px", fontWeight: "400" }], "title-md": ["15px", { lineHeight: "20px", fontWeight: "600" }], "time-tabular": ["13px", { lineHeight: "16px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "700" }] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;font-family:'Plus Jakarta Sans',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-xs"><button aria-label="Go back" class="w-11 h-11 -ml-2 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Auto-Collision Radar Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VaEK6_FmpxxxfVWGa-wjLnbPaNs2BVWoYSR0SkRPK798UZT0WcLzrUJIoaYArwikP3RVyY_EYT88E0h8HjOT-CybAIUDfRiod6mKPk_HY29QIHkII9zFYgr1zH8VHECRP2Q4-exMiA3LV1poe5GZoB0ngpvUYosmnvlUtBdLF0m23LKFrT2aJLYk7kKBZuTBIK3snLYU8v4m0VAkQhnaGWOb4G92AS_bDTNFycrWn8-6HkZiRGwB95RjQ"/><h1 class="font-headline-sm text-headline-sm text-on-surface ml-1">Add Schedule</h1></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="flex flex-col flex-1 relative w-full pt-16 pb-safe bg-surface"><div class="flex flex-col w-full px-margin pb-space-xl">
+<!-- Subtle decorative ambient badge container -->
+<div class="pt-space-md pb-space-lg flex flex-col items-start gap-space-xs">
+<div class="inline-flex items-center gap-1.5 px-space-md py-1 rounded-full bg-secondary-container text-on-secondary-fixed shadow-sm">
+<span class="material-symbols-outlined text-[15px] text-primary" style="font-variation-settings: 'FILL' 1;">radar</span>
+<span class="font-label-sm text-label-sm tracking-wide">Buat Akun Baru</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-1">Mulai Deteksi Jadwalmu</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[320px]">
+      Sinkronkan jadwal kuliah dan organisasi dalam hitungan detik tanpa drama bentrok.
+    </p>
+</div>
+<!-- Student Trust & Micro Feature Pill -->
+<div class="mb-space-lg p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Validasi Kampus Otomatis</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Mendukung 100+ universitas se-Indonesia</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]">school</span>
+</div>
+<!-- Registration Form Section -->
+<form class="flex flex-col gap-space-md" id="registerForm" onsubmit="event.preventDefault();">
+<!-- Input: Nama Lengkap -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="fullName">
+        Nama Lengkap
+        <span class="text-tertiary">*</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-outline text-[20px] pointer-events-none">badge</span>
+<input class="w-full h-12 pl-11 pr-4 bg-surface-container-lowest text-on-surface rounded-xl font-body-lg text-body-lg placeholder:text-outline focus:outline-none focus:bg-surface-container-low transition-all shadow-sm" id="fullName" name="fullName" placeholder="e.g. Dimas Wicaksono" required="" type="text"/>
+</div>
+</div>
+<!-- Input: Universitas / Kampus with Autocomplete Feel -->
+<div class="flex flex-col gap-1.5 relative">
+<label class="font-label-md text-label-md text-on-surface flex items-center justify-between" for="university">
+<span class="flex items-center gap-1">
+          Universitas / Kampus
+          <span class="text-tertiary">*</span>
+</span>
+<span class="font-label-sm text-label-sm text-primary">Deteksi Otomatis</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-outline text-[20px] pointer-events-none">account_balance</span>
+<input class="w-full h-12 pl-11 pr-10 bg-surface-container-lowest text-on-surface rounded-xl font-body-lg text-body-lg placeholder:text-outline focus:outline-none focus:bg-surface-container-low transition-all shadow-sm" id="university" name="university" placeholder="Pilih atau ketik kampus" required="" type="text" value="Universitas Indonesia"/>
+<button aria-label="Pilih Kampus" class="absolute right-3 text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</button>
+</div>
+<!-- Quick Selector Tag Pills -->
+<div class="flex items-center gap-1.5 mt-1 overflow-x-auto pb-1 scrollbar-none">
+<button class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm active:scale-95 transition-transform shrink-0" onclick="document.getElementById('university').value='Universitas Indonesia'" type="button">UI</button>
+<button class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm active:scale-95 transition-transform shrink-0" onclick="document.getElementById('university').value='Institut Teknologi Bandung'" type="button">ITB</button>
+<button class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm active:scale-95 transition-transform shrink-0" onclick="document.getElementById('university').value='Universitas Gadjah Mada'" type="button">UGM</button>
+<button class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm active:scale-95 transition-transform shrink-0" onclick="document.getElementById('university').value='Universitas Airlangga'" type="button">UNAIR</button>
+</div>
+</div>
+<!-- Input: Email Kampus (.ac.id) -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="campusEmail">
+          Email Kampus (.ac.id)
+          <span class="text-tertiary">*</span>
+</label>
+<span class="font-label-sm text-label-sm text-secondary">Akses radar prioritas</span>
+</div>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-outline text-[20px] pointer-events-none">alternate_email</span>
+<input class="w-full h-12 pl-11 pr-4 bg-surface-container-lowest text-on-surface rounded-xl font-body-lg text-body-lg placeholder:text-outline focus:outline-none focus:bg-surface-container-low transition-all shadow-sm" id="campusEmail" name="campusEmail" placeholder="dimas@ui.ac.id" required="" type="email"/>
+</div>
+</div>
+<!-- Input: Kata Sandi -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="password">
+          Kata Sandi
+          <span class="text-tertiary">*</span>
+</label>
+<span class="font-label-sm text-label-sm text-outline">Min. 8 karakter</span>
+</div>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-outline text-[20px] pointer-events-none">lock</span>
+<input class="w-full h-12 pl-11 pr-11 bg-surface-container-lowest text-on-surface rounded-xl font-body-lg text-body-lg placeholder:text-outline focus:outline-none focus:bg-surface-container-low transition-all shadow-sm" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button aria-label="Toggle password visibility" class="w-10 h-10 absolute right-1 flex items-center justify-center text-outline hover:text-on-surface transition-colors" onclick="togglePasswordVisibility('password', this)" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Input: Konfirmasi Kata Sandi -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1" for="confirmPassword">
+        Konfirmasi Kata Sandi
+        <span class="text-tertiary">*</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-outline text-[20px] pointer-events-none">lock_reset</span>
+<input class="w-full h-12 pl-11 pr-11 bg-surface-container-lowest text-on-surface rounded-xl font-body-lg text-body-lg placeholder:text-outline focus:outline-none focus:bg-surface-container-low transition-all shadow-sm" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required="" type="password"/>
+<button aria-label="Toggle password confirmation visibility" class="w-10 h-10 absolute right-1 flex items-center justify-center text-outline hover:text-on-surface transition-colors" onclick="togglePasswordVisibility('confirmPassword', this)" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Checkbox Terms & Privacy -->
+<div class="flex items-start gap-space-sm pt-1">
+<div class="relative flex items-center justify-center pt-0.5">
+<input class="w-5 h-5 rounded-lg accent-primary bg-surface-container-lowest cursor-pointer" id="termsCheckbox" required="" type="checkbox"/>
+</div>
+<label class="font-body-sm text-body-sm text-on-surface-variant leading-tight select-none cursor-pointer" for="termsCheckbox">
+        Saya menyetujui <a class="text-primary font-title-md hover:underline" href="javascript:void(0)">Ketentuan Layanan</a> &amp; <a class="text-primary font-title-md hover:underline" href="javascript:void(0)">Kebijakan Privasi</a> Auto-Collision Radar.
+      </label>
+</div>
+<!-- Primary Action Button -->
+<div class="pt-space-sm">
+<button class="w-full h-12 bg-primary text-on-primary font-headline-sm text-headline-sm rounded-xl flex items-center justify-center gap-2 shadow-md active:scale-[0.98] transition-all hover:bg-on-primary-fixed-variant" type="submit">
+<span>Daftar Akun Baru</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Visual Delight & Assurance Card -->
+<div class="mt-space-lg p-space-md rounded-xl bg-secondary-container/40 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">calendar_clock</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Bebas Stress Bentrokan</span>
+<span class="font-body-sm text-body-sm text-on-secondary-container">Deteksi tabrakan waktu KRS dan rapat BEM seketika.</span>
+</div>
+</div>
+<!-- Footer Link to Login -->
+<div class="mt-space-xl text-center py-2">
+<p class="font-body-md text-body-md text-on-surface-variant">
+      Sudah memiliki akun? 
+      <a class="font-title-md text-title-md text-primary hover:underline ml-1" href="javascript:history.back()">
+        Masuk sekarang
+      </a>
+</p>
+</div>
+</div>
+<script>
+  function togglePasswordVisibility(fieldId, triggerBtn) {
+    const inputField = document.getElementById(fieldId);
+    const iconSpan = triggerBtn.querySelector('.material-symbols-outlined');
+    if (!inputField || !iconSpan) return;
+
+    if (inputField.type === 'password') {
+      inputField.type = 'text';
+      iconSpan.textContent = 'visibility_off';
+    } else {
+      inputField.type = 'password';
+      iconSpan.textContent = 'visibility';
+    }
+  }
+</script></main></body></html>

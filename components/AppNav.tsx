@@ -47,7 +47,8 @@ const MENU_ITEMS: NavMenuItem[] = [
 ];
 
 export default function AppNav() {
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = rawPathname || "";
 
   const isItemActive = (item: NavMenuItem) => {
     if (item.href === "/home" || item.href === "/") {
@@ -182,11 +183,12 @@ export default function AppNav() {
               className="relative -top-5 flex flex-col items-center group focus-visible:outline-none"
             >
               <div
-                className={`w-13 h-13 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-90 duration-200 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                className={`w-13 h-13 min-w-[52px] min-h-[52px] shrink-0 aspect-square rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-90 duration-200 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                   isNewScheduleActive
                     ? "bg-primary-container text-on-primary ring-4 ring-primary/20 scale-105"
                     : "bg-primary text-on-primary shadow-primary/30 group-hover:scale-105"
                 }`}
+                style={{ width: "52px", height: "52px" }}
               >
                 <Plus className="w-7 h-7 stroke-[2.5]" />
               </div>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary": "#ffffff", "error-container": "#ffdad6", "inverse-primary": "#b4c5ff", "on-surface": "#131b2e", "primary": "#004ac6", "on-error": "#ffffff", "secondary": "#505f76", "surface": "#faf8ff", "on-primary-fixed-variant": "#003ea8", "on-primary": "#ffffff", "tertiary-container": "#cf2c30", "surface-variant": "#dae2fd", "tertiary-fixed-dim": "#ffb3ad", "tertiary-fixed": "#ffdad7", "surface-container-highest": "#dae2fd", "surface-container-lowest": "#ffffff", "on-surface-variant": "#434655", "primary-container": "#2563eb", "on-secondary-container": "#54647a", "on-secondary": "#ffffff", "surface-bright": "#faf8ff", "secondary-fixed-dim": "#b7c8e1", "surface-container-high": "#e2e7ff", "surface-dim": "#d2d9f4", "secondary-container": "#d0e1fb", "on-primary-container": "#eeefff", "on-tertiary-fixed-variant": "#930013", "error": "#ba1a1a", "on-secondary-fixed": "#0b1c30", "outline-variant": "#c3c6d7", "background": "#faf8ff", "primary-fixed-dim": "#b4c5ff", "on-background": "#131b2e", "surface-container": "#eaedff", "on-tertiary-container": "#ffecea", "primary-fixed": "#dbe1ff", "on-secondary-fixed-variant": "#38485d", "on-primary-fixed": "#00174b", "inverse-on-surface": "#eef0ff", "outline": "#737686", "surface-container-low": "#f2f3ff", "on-tertiary-fixed": "#410004", "tertiary": "#ab0b1c", "inverse-surface": "#283044", "surface-tint": "#0053db", "secondary-fixed": "#d3e4fe", "on-error-container": "#93000a" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter": "0.75rem", "space-xl": "1.5rem", "space-md": "0.75rem", "space-sm": "0.5rem", "space-lg": "1rem", "margin": "1rem", "space-xs": "0.25rem" }, fontFamily: { "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-md": ["Inter"], "label-sm": ["Inter"], "body-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "time-tabular": ["Inter"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, fontSize: { "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.015em", fontWeight: "700" }], "body-lg": ["15px", { lineHeight: "22px", fontWeight: "400" }], "headline-sm": ["17px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "600" }], "body-md": ["13px", { lineHeight: "18px", fontWeight: "400" }], "title-md": ["15px", { lineHeight: "20px", fontWeight: "600" }], "time-tabular": ["13px", { lineHeight: "16px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "700" }] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;font-family:'Plus Jakarta Sans',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-xs"><button aria-label="Go back" class="w-11 h-11 -ml-2 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Auto-Collision Radar Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VaEK6_FmpxxxfVWGa-wjLnbPaNs2BVWoYSR0SkRPK798UZT0WcLzrUJIoaYArwikP3RVyY_EYT88E0h8HjOT-CybAIUDfRiod6mKPk_HY29QIHkII9zFYgr1zH8VHECRP2Q4-exMiA3LV1poe5GZoB0ngpvUYosmnvlUtBdLF0m23LKFrT2aJLYk7kKBZuTBIK3snLYU8v4m0VAkQhnaGWOb4G92AS_bDTNFycrWn8-6HkZiRGwB95RjQ"/><h1 class="font-headline-sm text-headline-sm text-on-surface ml-1">Add Schedule</h1></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="flex flex-col flex-1 relative w-full pt-16 pb-safe bg-surface"><div class="flex flex-col w-full pb-24">
+<!-- Top Subheader Profile Bar -->
+<div class="px-margin pt-space-md pb-space-sm flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-secondary tracking-wider uppercase">Akun Mahasiswa</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Profil Saya</h2>
+</div>
+<div class="flex items-center gap-space-xs">
+<button aria-label="Pengaturan" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+<button aria-label="Edit Profil" class="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+</div>
+</div>
+<div class="px-margin flex flex-col gap-space-md">
+<!-- Student Identity Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md relative overflow-hidden">
+<!-- Ambient Decorative Accent -->
+<div class="absolute -right-8 -top-8 w-28 h-28 bg-primary-fixed/40 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-start gap-space-md relative">
+<div class="relative shrink-0">
+<img class="w-16 h-16 rounded-full object-cover shadow-sm" data-alt="Portrait photo of a young Indonesian male university student with glasses smiling warmly wearing a navy blue blazer and white polo shirt in soft library lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB23Nkxop0EgNSbS14dXdTKKyOmaA8CFKL1Dl6-wZkMKoemwbhWG2QT4txSHrDDuitLkrTyVA8_HluL-tBrP5Cnih7b7_u_BG_3A6p9aOIPYy_xO2zc0AXrb5g1Ow3SOikEvsy37HlPIYrF8-jrkCm53lC58Mmfrv-M_mqDCBiCf5ImjL4q8zJxWrp2Cpy9ax7-8GKQDTmww8bSjKHg4o4Xl0YI8V49Uh-e_nmJrvDsj3HO6mJaRV42"/>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary shadow">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Dimas Wicaksono</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 line-clamp-1">S1 Ilmu Komputer • Universitas Indonesia</p>
+<div class="flex items-center gap-space-xs mt-1.5 flex-wrap">
+<span class="font-time-tabular text-time-tabular text-secondary bg-surface-container-low px-2 py-0.5 rounded-md">NIM 2106728192</span>
+<span class="font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed-variant px-2 py-0.5 rounded-full">Angkatan 2022</span>
+</div>
+</div>
+</div>
+<!-- Quick Pill Status Row -->
+<div class="flex items-center justify-between bg-surface-container-low rounded-lg p-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="font-label-md text-label-md text-on-surface">Semester 6 • Aktif</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold flex items-center gap-0.5">
+          SIAKAD UI
+          <span class="material-symbols-outlined text-[14px]">link</span>
+</span>
+</div>
+</div>
+<!-- Radar Conflict Statistics Bento Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">radar</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface">Radar Health Score</span>
+</div>
+<span class="font-label-sm text-label-sm bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+          Optimal
+        </span>
+</div>
+<!-- Score Ring + Metrics Display -->
+<div class="grid grid-cols-3 gap-space-sm items-center pt-1">
+<!-- Circular Health Progress -->
+<div class="flex flex-col items-center justify-center bg-surface-container-low rounded-lg p-space-sm">
+<div class="relative w-12 h-12 flex items-center justify-center">
+<svg class="w-12 h-12 -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="98, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<span class="absolute font-time-tabular text-time-tabular text-primary">98%</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary mt-1 text-center">Bebas Bentrok</span>
+</div>
+<!-- Metric 2: Total Jadwal -->
+<div class="flex flex-col items-center justify-center bg-surface-container-low rounded-lg p-space-sm h-full">
+<span class="font-headline-md text-headline-md text-on-surface">14</span>
+<span class="font-label-sm text-label-sm text-secondary text-center mt-0.5">Jadwal Aktif</span>
+<span class="font-body-sm text-[10px] text-primary mt-1">Minggu ini</span>
+</div>
+<!-- Metric 3: Konflik Selesai -->
+<div class="flex flex-col items-center justify-center bg-surface-container-low rounded-lg p-space-sm h-full">
+<div class="flex items-center gap-0.5 text-tertiary-container">
+<span class="font-headline-md text-headline-md text-tertiary">2</span>
+<span class="material-symbols-outlined text-[14px]">done_all</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary text-center mt-0.5">Tertangani</span>
+<span class="font-body-sm text-[10px] text-emerald-700 mt-1">100% Clear</span>
+</div>
+</div>
+</div>
+<!-- Group 1: Pengaturan Jadwal & Kalender -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase px-1 tracking-wider">Pengaturan Jadwal &amp; Kalender</span>
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Campus Portal -->
+<div class="p-space-md flex items-center justify-between active:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">school</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">Kalender SIAKAD UI</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Sinkronisasi mata kuliah otomatis</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-sm text-label-sm bg-emerald-50 text-emerald-700 px-2 py-1 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              Tersinkron
+            </span>
+<span class="material-symbols-outlined text-secondary text-[18px]">chevron_right</span>
+</div>
+</div>
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<!-- Google Calendar Sync -->
+<div class="p-space-md flex items-center justify-between active:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">event_available</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">Google Calendar Sync</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">dimas.wicaksono@ui.ac.id</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed px-2 py-1 rounded-full">Aktif</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">chevron_right</span>
+</div>
+</div>
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<!-- Custom Category Pills -->
+<div class="p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">category</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface">Kategori Jadwal Kustom</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-[18px]">add_circle</span>
+</div>
+<div class="flex items-center gap-space-xs flex-wrap pl-11">
+<span class="font-label-sm text-label-sm bg-indigo-100 text-indigo-800 px-2.5 py-1 rounded-full">Kuliah</span>
+<span class="font-label-sm text-label-sm bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">BEM Fasilkom</span>
+<span class="font-label-sm text-label-sm bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full">Kepanitiaan</span>
+<span class="font-label-sm text-label-sm bg-sky-100 text-sky-800 px-2.5 py-1 rounded-full">Les Privat</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Group 2: Preferensi Radar Notifikasi -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase px-1 tracking-wider">Preferensi Radar &amp; Deteksi</span>
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Real-Time Alert Toggle -->
+<div class="p-space-md flex items-center justify-between">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">notification_important</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface">Peringatan Real-Time</span>
+<span class="font-body-sm text-body-sm text-secondary">Pop-up instan saat ada bentrokan baru</span>
+</div>
+</div>
+<button aria-label="Toggle Peringatan Real-time" class="w-12 h-7 rounded-full bg-primary transition-colors relative flex items-center px-1 shrink-0" id="toggle-realtime" onclick="toggleSwitch(this)">
+<span class="w-5 h-5 rounded-full bg-surface shadow-sm transform translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<!-- Buffer Gap Slider/Selector -->
+<div class="p-space-md flex items-center justify-between active:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">timelapse</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface">Toleransi Jeda Kelas</span>
+<span class="font-body-sm text-body-sm text-secondary">Waktu tempuh pindah gedung/ruang</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-sm text-label-sm bg-surface-container text-on-surface-variant px-2.5 py-1 rounded-lg">15 Menit</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Group 3: Akun & Keamanan -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase px-1 tracking-wider">Akun &amp; Keamanan</span>
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Change Password -->
+<button class="p-space-md flex items-center justify-between w-full text-left active:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined text-[20px]">lock_reset</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface">Ganti Kata Sandi</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-[18px]">chevron_right</span>
+</button>
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<!-- Help & Support -->
+<button class="p-space-md flex items-center justify-between w-full text-left active:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined text-[20px]">help_center</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface">Bantuan &amp; Dukungan</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Danger Zone / Log Out Action -->
+<div class="pt-space-xs">
+<button class="w-full h-12 rounded-xl bg-error-container/60 text-error font-title-md text-title-md flex items-center justify-center gap-space-xs active:scale-[0.99] transition-transform" onclick="confirmLogout()">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+        Keluar dari Akun
+      </button>
+</div>
+<!-- Version & Build Info -->
+<div class="flex flex-col items-center justify-center pt-space-xs pb-space-sm text-center">
+<p class="font-body-sm text-body-sm text-secondary">Auto-Collision Radar v1.2.0 • Build Mahasiswa</p>
+<p class="font-label-sm text-[10px] text-secondary/70 mt-0.5">Didesain khusus untuk efisiensi jadwal perkuliahan</p>
+</div>
+</div>
+<!-- Bottom Navigation Bar (Fixed Bottom Dock) -->
+<nav class="fixed bottom-0 left-0 right-0 z-40 bg-surface/90 backdrop-blur-md pb-safe shadow-[0_-2px_12px_rgba(0,0,0,0.05)]">
+<div class="h-16 px-space-md flex items-center justify-around max-w-md mx-auto">
+<!-- Home Tab -->
+<a aria-label="Beranda" class="flex flex-col items-center justify-center flex-1 py-1 text-secondary active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="font-label-sm text-[10px] mt-0.5">Beranda</span>
+</a>
+<!-- Calendar Tab -->
+<a aria-label="Kalender" class="flex flex-col items-center justify-center flex-1 py-1 text-secondary active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[22px]">calendar_month</span>
+<span class="font-label-sm text-[10px] mt-0.5">Kalender</span>
+</a>
+<!-- Weekly Matrix Tab -->
+<a aria-label="Mingguan" class="flex flex-col items-center justify-center flex-1 py-1 text-secondary active:scale-95 transition-transform" href="#">
+<div class="relative">
+<span class="material-symbols-outlined text-[22px]">view_week</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-tertiary"></span>
+</div>
+<span class="font-label-sm text-[10px] mt-0.5">Mingguan</span>
+</a>
+<!-- Profile Tab (Active Highlighted) -->
+<a aria-current="page" aria-label="Profil Mahasiswa" class="flex flex-col items-center justify-center flex-1 py-1 text-primary active:scale-95 transition-transform relative" href="#">
+<div class="w-10 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<span class="font-label-sm text-[10px] mt-0.5 font-bold text-primary">Profil</span>
+</a>
+</div>
+</nav>
+</div>
+<script>
+  function toggleSwitch(btn) {
+    const knob = btn.querySelector('span');
+    const isChecked = btn.classList.contains('bg-primary');
+    if (isChecked) {
+      btn.classList.remove('bg-primary');
+      btn.classList.add('bg-outline-variant');
+      knob.classList.remove('translate-x-5');
+      knob.classList.add('translate-x-0');
+    } else {
+      btn.classList.add('bg-primary');
+      btn.classList.remove('bg-outline-variant');
+      knob.classList.add('translate-x-5');
+      knob.classList.remove('translate-x-0');
+    }
+  }
+
+  function confirmLogout() {
+    if (window.confirm("Yakin ingin keluar dari akun Auto-Collision Radar?")) {
+      alert("Anda telah berhasil keluar.");
+    }
+  }
+</script></main></body></html>

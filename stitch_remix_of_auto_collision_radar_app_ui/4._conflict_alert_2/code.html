@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary": "#ffffff", "error-container": "#ffdad6", "inverse-primary": "#b4c5ff", "on-surface": "#131b2e", "primary": "#004ac6", "on-error": "#ffffff", "secondary": "#505f76", "surface": "#faf8ff", "on-primary-fixed-variant": "#003ea8", "on-primary": "#ffffff", "tertiary-container": "#cf2c30", "surface-variant": "#dae2fd", "tertiary-fixed-dim": "#ffb3ad", "tertiary-fixed": "#ffdad7", "surface-container-highest": "#dae2fd", "surface-container-lowest": "#ffffff", "on-surface-variant": "#434655", "primary-container": "#2563eb", "on-secondary-container": "#54647a", "on-secondary": "#ffffff", "surface-bright": "#faf8ff", "secondary-fixed-dim": "#b7c8e1", "surface-container-high": "#e2e7ff", "surface-dim": "#d2d9f4", "secondary-container": "#d0e1fb", "on-primary-container": "#eeefff", "on-tertiary-fixed-variant": "#930013", "error": "#ba1a1a", "on-secondary-fixed": "#0b1c30", "outline-variant": "#c3c6d7", "background": "#faf8ff", "primary-fixed-dim": "#b4c5ff", "on-background": "#131b2e", "surface-container": "#eaedff", "on-tertiary-container": "#ffecea", "primary-fixed": "#dbe1ff", "on-secondary-fixed-variant": "#38485d", "on-primary-fixed": "#00174b", "inverse-on-surface": "#eef0ff", "outline": "#737686", "surface-container-low": "#f2f3ff", "on-tertiary-fixed": "#410004", "tertiary": "#ab0b1c", "inverse-surface": "#283044", "surface-tint": "#0053db", "secondary-fixed": "#d3e4fe", "on-error-container": "#93000a" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter": "0.75rem", "space-xl": "1.5rem", "space-md": "0.75rem", "space-sm": "0.5rem", "space-lg": "1rem", "margin": "1rem", "space-xs": "0.25rem" }, fontFamily: { "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-md": ["Inter"], "label-sm": ["Inter"], "body-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "time-tabular": ["Inter"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, fontSize: { "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.015em", fontWeight: "700" }], "body-lg": ["15px", { lineHeight: "22px", fontWeight: "400" }], "headline-sm": ["17px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "600" }], "body-md": ["13px", { lineHeight: "18px", fontWeight: "400" }], "title-md": ["15px", { lineHeight: "20px", fontWeight: "600" }], "time-tabular": ["13px", { lineHeight: "16px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "700" }] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;font-family:'Plus Jakarta Sans',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen pt-safe pb-safe"><main class="flex flex-col flex-1 relative w-full bg-surface"><div class="flex flex-col w-full relative">
+<!-- Dimmed & Soft Blurred Canvas Behind (Simulated Underlying Schedule Canvas) -->
+<div class="w-full px-margin opacity-30 pointer-events-none select-none filter blur-[1px]">
+<div class="flex items-center justify-between py-space-md">
+<div class="flex items-center space-x-space-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Kamis, 24 Oktober</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-1 rounded-full">Semester Gasal</span>
+</div>
+<!-- Underlying Timeline Mock Items -->
+<div class="space-y-space-md mt-space-sm">
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex items-start space-x-space-md">
+<span class="font-time-tabular text-time-tabular text-secondary w-12">08.00</span>
+<div class="flex-1">
+<p class="font-title-md text-title-md text-on-surface">Sistem Terdistribusi</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Lab Komputer 3 • Kuliah</p>
+</div>
+</div>
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex items-start space-x-space-md">
+<span class="font-time-tabular text-time-tabular text-secondary w-12">13.00</span>
+<div class="flex-1">
+<p class="font-title-md text-title-md text-on-surface">Kecerdasan Buatan</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Ruang Kuliah 402 • Kuliah</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Backdrop Overlay (Safe Touch Focus) -->
+<div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-40 transition-opacity"></div>
+<!-- Radar Collision Warning Sheet / Card -->
+<div class="fixed inset-x-0 bottom-0 z-50 p-margin max-w-md mx-auto flex flex-col justify-end">
+<!-- Elevated Warning Modal Card -->
+<div class="w-full bg-surface-container-lowest rounded-xl shadow-2xl p-space-lg flex flex-col relative overflow-hidden transition-all duration-300 transform translate-y-0">
+<!-- Top Decorative Ambient Glow -->
+<div class="absolute -top-16 -right-16 w-36 h-36 bg-tertiary-container/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="absolute -top-16 -left-16 w-36 h-36 bg-error/10 rounded-full blur-2xl pointer-events-none"></div>
+<!-- Handle Pill for visual modal affordance -->
+<div class="w-12 h-1.5 bg-outline-variant/60 rounded-full mx-auto mb-space-md"></div>
+<!-- Radar Warning Pill Badge -->
+<div class="flex items-center justify-between mb-space-sm">
+<div class="inline-flex items-center space-x-1.5 bg-error-container text-on-error-container px-3 py-1 rounded-full">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary" style="font-variation-settings: 'FILL' 1;">sensors</span>
+<span class="font-label-sm text-label-sm tracking-wider uppercase text-on-tertiary-container">RADAR COLLISION DETECTED</span>
+</div>
+<button aria-label="Tutup" class="text-secondary hover:text-on-surface p-1 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" id="dismissBtn">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Headlines -->
+<div class="mb-space-md">
+<h1 class="font-headline-lg text-headline-lg text-tertiary mb-1 flex items-center gap-1.5">
+<span>Jadwal Bentrok!</span>
+<span class="material-symbols-outlined text-tertiary text-[22px]">warning</span>
+</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Jadwal baru bertabrakan langsung dengan agenda perkuliahan yang telah terdaftar.
+        </p>
+</div>
+<!-- Overlap Duration Pill Highlight -->
+<div class="w-full bg-on-tertiary-container rounded-xl p-space-md mb-space-md flex items-center justify-between">
+<div class="flex items-center space-x-space-sm">
+<div class="w-8 h-8 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[18px]">timelapse</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-tertiary uppercase tracking-wide">Total Overlap</p>
+<p class="font-time-tabular text-time-tabular text-tertiary font-bold">60 Menit <span class="font-body-sm font-normal text-on-surface-variant">• 14.00 – 15.00</span></p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm bg-tertiary text-on-tertiary px-2.5 py-1 rounded-full">
+          Tabrakan
+        </span>
+</div>
+<!-- Conflict Comparison Breakdown -->
+<div class="space-y-space-xs mb-space-lg relative">
+<!-- Activity A: Jadwal Baru -->
+<div class="bg-surface-container-low rounded-xl p-space-md relative">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center space-x-1.5">
+<span class="font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded-full">
+                Jadwal Baru
+              </span>
+<span class="font-label-sm text-label-sm bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full">
+                Organisasi
+              </span>
+</div>
+<span class="font-time-tabular text-time-tabular text-tertiary">14.00 – 16.00</span>
+</div>
+<p class="font-title-md text-title-md text-on-surface mb-0.5">Rapat Panitia Dies Natalis</p>
+<div class="flex items-center text-secondary space-x-1 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px]">meeting_room</span>
+<span class="truncate">Ruang Rapat PKM Lt. 2</span>
+</div>
+</div>
+<!-- Intersection Radar Graphic Between -->
+<div class="relative py-1 flex items-center justify-center">
+<div class="h-0.5 w-full bg-surface-container-highest"></div>
+<div class="absolute bg-surface-container-lowest px-2.5 py-1 rounded-full shadow-sm flex items-center space-x-1">
+<span class="material-symbols-outlined text-tertiary text-[18px]">sync_problem</span>
+<span class="font-label-sm text-label-sm text-tertiary">Irisan Waktu</span>
+</div>
+</div>
+<!-- Activity B: Jadwal Eksisting -->
+<div class="bg-surface-container-low rounded-xl p-space-md relative">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center space-x-1.5">
+<span class="font-label-sm text-label-sm bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full">
+                Eksisting
+              </span>
+<span class="font-label-sm text-label-sm bg-primary-container text-on-primary-container px-2 py-0.5 rounded-full">
+                Kuliah
+              </span>
+</div>
+<span class="font-time-tabular text-time-tabular text-on-surface">13.00 – 15.00</span>
+</div>
+<p class="font-title-md text-title-md text-on-surface mb-0.5">Kecerdasan Buatan</p>
+<div class="flex items-center text-secondary space-x-1 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px]">school</span>
+<span class="truncate">Ruang Kuliah 402 • Wajib</span>
+</div>
+</div>
+</div>
+<!-- Action Button Architecture -->
+<div class="flex flex-col space-y-space-sm pt-space-xs">
+<!-- Primary Action -->
+<button class="w-full bg-primary-container hover:bg-primary active:scale-[0.98] transition-all text-on-primary rounded-xl py-3 px-space-lg flex items-center justify-center space-x-2 shadow-md" id="resolveBtn">
+<span class="material-symbols-outlined text-[20px]">auto_fix_high</span>
+<span class="font-headline-sm text-headline-sm text-on-primary">Lihat Detail &amp; Atur Bentrokan</span>
+</button>
+<!-- Secondary Action -->
+<button class="w-full bg-surface-container hover:bg-surface-container-high active:scale-[0.98] transition-all text-on-surface rounded-xl py-3 px-space-lg flex items-center justify-center space-x-2" id="saveAnywayBtn">
+<span class="material-symbols-outlined text-[18px] text-secondary">bookmark_border</span>
+<span class="font-title-md text-title-md">Tetap Simpan (Abaikan)</span>
+</button>
+<!-- Tertiary Link Action -->
+<button class="w-full text-secondary hover:text-on-surface py-2 font-label-md text-label-md transition-colors text-center" id="editFormBtn">
+          Kembali Edit Form
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const resolveBtn = document.getElementById('resolveBtn');
+    const saveAnywayBtn = document.getElementById('saveAnywayBtn');
+    const editFormBtn = document.getElementById('editFormBtn');
+    const dismissBtn = document.getElementById('dismissBtn');
+
+    function triggerHapticFeedback() {
+      if (window.navigator && window.navigator.vibrate) {
+        window.navigator.vibrate(30);
+      }
+    }
+
+    if (resolveBtn) {
+      resolveBtn.addEventListener('click', function() {
+        triggerHapticFeedback();
+        resolveBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[20px]">progress_activity</span><span class="font-headline-sm text-headline-sm text-on-primary">Membuka Radar Penyelesaian...</span>';
+      });
+    }
+
+    if (saveAnywayBtn) {
+      saveAnywayBtn.addEventListener('click', function() {
+        triggerHapticFeedback();
+        saveAnywayBtn.classList.add('opacity-75');
+      });
+    }
+
+    if (dismissBtn) {
+      dismissBtn.addEventListener('click', function() {
+        const modal = dismissBtn.closest('.fixed.inset-x-0');
+        if (modal) {
+          modal.style.transition = 'transform 0.25s ease-in, opacity 0.2s';
+          modal.style.transform = 'translateY(100%)';
+          modal.style.opacity = '0';
+        }
+      });
+    }
+
+    if (editFormBtn) {
+      editFormBtn.addEventListener('click', function() {
+        triggerHapticFeedback();
+      });
+    }
+  })();
+</script></main></body></html>

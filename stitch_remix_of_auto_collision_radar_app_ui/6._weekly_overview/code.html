@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary": "#ffffff", "error-container": "#ffdad6", "inverse-primary": "#b4c5ff", "on-surface": "#131b2e", "primary": "#004ac6", "on-error": "#ffffff", "secondary": "#505f76", "surface": "#faf8ff", "on-primary-fixed-variant": "#003ea8", "on-primary": "#ffffff", "tertiary-container": "#cf2c30", "surface-variant": "#dae2fd", "tertiary-fixed-dim": "#ffb3ad", "tertiary-fixed": "#ffdad7", "surface-container-highest": "#dae2fd", "surface-container-lowest": "#ffffff", "on-surface-variant": "#434655", "primary-container": "#2563eb", "on-secondary-container": "#54647a", "on-secondary": "#ffffff", "surface-bright": "#faf8ff", "secondary-fixed-dim": "#b7c8e1", "surface-container-high": "#e2e7ff", "surface-dim": "#d2d9f4", "secondary-container": "#d0e1fb", "on-primary-container": "#eeefff", "on-tertiary-fixed-variant": "#930013", "error": "#ba1a1a", "on-secondary-fixed": "#0b1c30", "outline-variant": "#c3c6d7", "background": "#faf8ff", "primary-fixed-dim": "#b4c5ff", "on-background": "#131b2e", "surface-container": "#eaedff", "on-tertiary-container": "#ffecea", "primary-fixed": "#dbe1ff", "on-secondary-fixed-variant": "#38485d", "on-primary-fixed": "#00174b", "inverse-on-surface": "#eef0ff", "outline": "#737686", "surface-container-low": "#f2f3ff", "on-tertiary-fixed": "#410004", "tertiary": "#ab0b1c", "inverse-surface": "#283044", "surface-tint": "#0053db", "secondary-fixed": "#d3e4fe", "on-error-container": "#93000a" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter": "0.75rem", "space-xl": "1.5rem", "space-md": "0.75rem", "space-sm": "0.5rem", "space-lg": "1rem", "margin": "1rem", "space-xs": "0.25rem" }, fontFamily: { "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-md": ["Inter"], "label-sm": ["Inter"], "body-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "time-tabular": ["Inter"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, fontSize: { "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.015em", fontWeight: "700" }], "body-lg": ["15px", { lineHeight: "22px", fontWeight: "400" }], "headline-sm": ["17px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "600" }], "body-md": ["13px", { lineHeight: "18px", fontWeight: "400" }], "title-md": ["15px", { lineHeight: "20px", fontWeight: "600" }], "time-tabular": ["13px", { lineHeight: "16px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "700" }] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;font-family:'Plus Jakarta Sans',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Auto-Collision Radar Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VaEK6_FmpxxxfVWGa-wjLnbPaNs2BVWoYSR0SkRPK798UZT0WcLzrUJIoaYArwikP3RVyY_EYT88E0h8HjOT-CybAIUDfRiod6mKPk_HY29QIHkII9zFYgr1zH8VHECRP2Q4-exMiA3LV1poe5GZoB0ngpvUYosmnvlUtBdLF0m23LKFrT2aJLYk7kKBZuTBIK3snLYU8v4m0VAkQhnaGWOb4G92AS_bDTNFycrWn8-6HkZiRGwB95RjQ"/><div class="flex flex-col"><span class="font-label-sm text-label-sm text-secondary tracking-wider uppercase">Collision Radar</span><h1 class="font-title-md text-title-md text-on-surface leading-none">Weekly Overview</h1></div></div><div class="flex items-center gap-space-sm"><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-full text-secondary hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col flex-1 relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full">
+<!-- Interactive & Filter Controller Script -->
+<script>
+    function setScheduleFilter(filterType) {
+      const allBtn = document.getElementById('filter-all');
+      const clashBtn = document.getElementById('filter-clash');
+      const safeDays = document.querySelectorAll('.day-safe');
+      const clashDays = document.querySelectorAll('.day-clash');
+
+      if (filterType === 'clash') {
+        allBtn.className = 'px-space-md py-1.5 rounded-full font-label-sm text-label-sm transition-all bg-surface-container text-on-surface-variant shadow-none';
+        clashBtn.className = 'px-space-md py-1.5 rounded-full font-label-sm text-label-sm transition-all bg-tertiary text-on-tertiary shadow-sm flex items-center gap-1';
+        safeDays.forEach(el => el.classList.add('hidden'));
+        clashDays.forEach(el => el.classList.remove('hidden'));
+      } else {
+        allBtn.className = 'px-space-md py-1.5 rounded-full font-label-sm text-label-sm transition-all bg-primary text-on-primary shadow-sm';
+        clashBtn.className = 'px-space-md py-1.5 rounded-full font-label-sm text-label-sm transition-all bg-surface-container text-on-surface-variant shadow-none flex items-center gap-1';
+        safeDays.forEach(el => el.classList.remove('hidden'));
+        clashDays.forEach(el => el.classList.remove('hidden'));
+      }
+    }
+
+    function openCollisionResolver(dayName) {
+      const toast = document.getElementById('toast-resolver');
+      const toastText = document.getElementById('toast-day-target');
+      if (toast && toastText) {
+        toastText.textContent = dayName;
+        toast.classList.remove('translate-y-24', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+        setTimeout(() => {
+          toast.classList.add('translate-y-24', 'opacity-0');
+          toast.classList.remove('translate-y-0', 'opacity-100');
+        }, 3200);
+      }
+    }
+  </script>
+<!-- Content Stream Container -->
+<div class="flex flex-col px-margin py-space-md gap-space-lg">
+<!-- Screen Header & Week Switcher Bar -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">Overview Mingguan</h2>
+<span class="font-body-sm text-body-sm text-secondary">Minggu ke-9 • Semester Ganjil 2024</span>
+</div>
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">view_week</span>
+</div>
+</div>
+<!-- Tactile Week Navigator Segment -->
+<div class="flex items-center justify-between bg-surface-container-low rounded-xl px-space-md py-2 shadow-sm">
+<button aria-label="Minggu Sebelumnya" class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface hover:bg-surface-container transition-transform active:scale-95 text-on-surface">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<div class="flex items-center gap-1.5 font-title-md text-title-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]">date_range</span>
+<span>21 – 27 Okt 2024</span>
+</div>
+<button aria-label="Minggu Berikutnya" class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface hover:bg-surface-container transition-transform active:scale-95 text-on-surface">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Collision Warning Banner & Quick Action Filter -->
+<section class="relative overflow-hidden bg-error-container text-on-error-container rounded-xl p-space-lg shadow-sm">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center flex-shrink-0 shadow-sm animate-pulse">
+<span class="material-symbols-outlined text-[22px]">crisis_alert</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md font-bold tracking-tight text-tertiary">2 Bentrokan Terdeteksi</span>
+<span class="px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-tertiary/15 text-tertiary font-semibold">Kritis</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Terjadi di <strong class="text-on-surface">Kamis</strong> (14.00–15.00) &amp; <strong class="text-on-surface">Jumat</strong> (10.00–10.45).
+          </p>
+</div>
+</div>
+<!-- Quick Category Toggle Pills -->
+<div class="flex items-center gap-2 mt-space-md pt-space-sm">
+<button class="px-space-md py-1.5 rounded-full font-label-sm text-label-sm transition-all bg-primary text-on-primary shadow-sm" id="filter-all" onclick="setScheduleFilter('all')">
+          Semua Jadwal (7 Hari)
+        </button>
+<button class="px-space-md py-1.5 rounded-full font-label-sm text-label-sm transition-all bg-surface-container text-on-surface-variant shadow-none flex items-center gap-1" id="filter-clash" onclick="setScheduleFilter('clash')">
+<span class="material-symbols-outlined text-[14px] text-tertiary">warning</span>
+<span>Hanya Bentrok (2 Hari)</span>
+</button>
+</div>
+</section>
+<!-- Visual Matrix: Day-by-Day Grid -->
+<section class="flex flex-col gap-space-md" id="matrix-container">
+<!-- SENIN (Safe) -->
+<div class="day-safe flex flex-col bg-surface-container-lowest rounded-xl p-space-lg shadow-sm transition-all">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center font-title-md text-title-md text-primary font-bold">
+              Sn
+            </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Senin, 21 Okt</span>
+<span class="font-body-sm text-body-sm text-secondary">2 Kegiatan Terdaftar</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-secondary-container text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+            Bebas Bentrok
+          </span>
+</div>
+<!-- Schedule Items -->
+<div class="flex flex-col gap-2 mt-2">
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-low rounded-lg">
+<span class="font-time-tabular text-time-tabular text-secondary pt-0.5 w-24 flex-shrink-0">08.00–10.30</span>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-title-md text-title-md text-on-surface truncate">Kalkulus Multivariabel</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">Kuliah</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Gedung D302</span>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-low rounded-lg">
+<span class="font-time-tabular text-time-tabular text-secondary pt-0.5 w-24 flex-shrink-0">13.00–15.00</span>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-title-md text-title-md text-on-surface truncate">Praktikum Fisika Dasar</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">Kuliah</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Lab Fisika Terpadu</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SELASA (Safe) -->
+<div class="day-safe flex flex-col bg-surface-container-lowest rounded-xl p-space-lg shadow-sm transition-all">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center font-title-md text-title-md text-primary font-bold">
+              Sl
+            </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Selasa, 22 Okt</span>
+<span class="font-body-sm text-body-sm text-secondary">1 Kegiatan Terdaftar</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-secondary-container text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+            Bebas Bentrok
+          </span>
+</div>
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-low rounded-lg mt-2">
+<span class="font-time-tabular text-time-tabular text-secondary pt-0.5 w-24 flex-shrink-0">10.00–12.00</span>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-title-md text-title-md text-on-surface truncate">Bahasa Inggris Teknis</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">Kuliah</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Ruang Rektorat Lt. 2</span>
+</div>
+</div>
+</div>
+</div>
+<!-- RABU (Safe) -->
+<div class="day-safe flex flex-col bg-surface-container-lowest rounded-xl p-space-lg shadow-sm transition-all">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center font-title-md text-title-md text-primary font-bold">
+              Rb
+            </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Rabu, 23 Okt</span>
+<span class="font-body-sm text-body-sm text-secondary">2 Kegiatan Terdaftar</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-secondary-container text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+            Bebas Bentrok
+          </span>
+</div>
+<div class="flex flex-col gap-2 mt-2">
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-low rounded-lg">
+<span class="font-time-tabular text-time-tabular text-secondary pt-0.5 w-24 flex-shrink-0">09.00–11.30</span>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-title-md text-title-md text-on-surface truncate">Struktur Data &amp; Algoritma</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">Kuliah</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Lab Komputer A</span>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-low rounded-lg">
+<span class="font-time-tabular text-time-tabular text-secondary pt-0.5 w-24 flex-shrink-0">16.00–18.00</span>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-title-md text-title-md text-on-surface truncate">Olahraga Futsal Prodi</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">Lainnya</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Gelanggang Remaja</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- KAMIS (CRITICAL COLLISION HIGHLIGHT) -->
+<div class="day-clash relative flex flex-col bg-surface-container-lowest rounded-xl p-space-lg shadow-md overflow-hidden">
+<!-- Structural Accent Stripe -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-tertiary"></div>
+<div class="flex items-center justify-between pb-space-sm pl-1">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-tertiary-fixed flex items-center justify-center font-title-md text-title-md text-tertiary font-bold">
+              Km
+            </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-on-surface">Kamis, 24 Okt</span>
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+</div>
+<span class="font-body-sm text-body-sm text-tertiary font-medium">3 Jadwal • Terjadi Bentrokan</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-error-container text-on-error-container font-semibold">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+            Bentrok 60m
+          </span>
+</div>
+<!-- Normal Item in Thursday -->
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-low rounded-lg mt-2 opacity-85">
+<span class="font-time-tabular text-time-tabular text-secondary pt-0.5 w-24 flex-shrink-0">08.00–10.30</span>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-title-md text-title-md text-on-surface truncate">Pemrograman Web Lanjut</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">Kuliah</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Ruang Lab Inovasi</span>
+</div>
+</div>
+</div>
+<!-- Interlocking Clash Zone -->
+<div class="mt-space-sm flex flex-col gap-2 p-space-sm rounded-xl bg-error-container/30">
+<!-- Collision Alert Ribbon -->
+<div class="flex items-center justify-between px-space-sm py-1 rounded-lg bg-tertiary text-on-tertiary">
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+<span>Bentrok 60 Menit (14.00–15.00)</span>
+</div>
+<span class="font-label-sm text-label-sm uppercase tracking-wide bg-on-tertiary/20 px-1.5 py-0.5 rounded">Overlap</span>
+</div>
+<!-- Schedule Item 1 -->
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-lowest rounded-lg shadow-sm">
+<span class="font-time-tabular text-time-tabular text-tertiary pt-0.5 w-24 flex-shrink-0 font-bold">13.00–15.00</span>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface truncate">Kecerdasan Buatan</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">priority_high</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">Kuliah</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Gedung B201</span>
+</div>
+</div>
+</div>
+<!-- Schedule Item 2 -->
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-lowest rounded-lg shadow-sm">
+<span class="font-time-tabular text-time-tabular text-tertiary pt-0.5 w-24 flex-shrink-0 font-bold">14.00–16.00</span>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface truncate">Rapat Panitia Dies Natalis</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">priority_high</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm">Organisasi</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Student Center Lt. 1</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Button -->
+<button class="w-full mt-1 py-2.5 px-space-md rounded-xl bg-tertiary text-on-tertiary font-title-md text-title-md flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-transform" onclick="openCollisionResolver('Kamis (14.00–15.00)')">
+<span>Atur Bentrokan Kamis</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- JUMAT (SECOND COLLISION HIGHLIGHT) -->
+<div class="day-clash relative flex flex-col bg-surface-container-lowest rounded-xl p-space-lg shadow-md overflow-hidden">
+<!-- Structural Accent Stripe -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-tertiary"></div>
+<div class="flex items-center justify-between pb-space-sm pl-1">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-tertiary-fixed flex items-center justify-center font-title-md text-title-md text-tertiary font-bold">
+              Jm
+            </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-on-surface">Jumat, 25 Okt</span>
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+</div>
+<span class="font-body-sm text-body-sm text-tertiary font-medium">2 Jadwal • Terjadi Bentrokan</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-error-container text-on-error-container font-semibold">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+            Bentrok 45m
+          </span>
+</div>
+<!-- Friday Clash Container -->
+<div class="mt-2 flex flex-col gap-2 p-space-sm rounded-xl bg-error-container/30">
+<div class="flex items-center justify-between px-space-sm py-1 rounded-lg bg-tertiary text-on-tertiary">
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+<span>Bentrok 45 Menit (10.00–10.45)</span>
+</div>
+<span class="font-label-sm text-label-sm uppercase tracking-wide bg-on-tertiary/20 px-1.5 py-0.5 rounded">Overlap</span>
+</div>
+<!-- Schedule 1 -->
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-lowest rounded-lg shadow-sm">
+<span class="font-time-tabular text-time-tabular text-tertiary pt-0.5 w-24 flex-shrink-0 font-bold">09.00–11.00</span>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface truncate">Seminar Kewirausahaan</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">priority_high</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">Kuliah</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Auditorium Utama</span>
+</div>
+</div>
+</div>
+<!-- Schedule 2 -->
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-lowest rounded-lg shadow-sm">
+<span class="font-time-tabular text-time-tabular text-tertiary pt-0.5 w-24 flex-shrink-0 font-bold">10.00–11.30</span>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface truncate">Briefing Divisi Humas</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">priority_high</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm">Organisasi</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Meeting Room B</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-1 py-2.5 px-space-md rounded-xl bg-tertiary text-on-tertiary font-title-md text-title-md flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-transform" onclick="openCollisionResolver('Jumat (10.00–10.45)')">
+<span>Atur Bentrokan Jumat</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- SABTU (Safe) -->
+<div class="day-safe flex flex-col bg-surface-container-lowest rounded-xl p-space-lg shadow-sm transition-all">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center font-title-md text-title-md text-primary font-bold">
+              Sb
+            </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Sabtu, 26 Okt</span>
+<span class="font-body-sm text-body-sm text-secondary">1 Kegiatan Terdaftar</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-secondary-container text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+            Bebas Bentrok
+          </span>
+</div>
+<div class="flex items-start gap-space-md p-space-sm bg-surface-container-low rounded-lg mt-2">
+<span class="font-time-tabular text-time-tabular text-secondary pt-0.5 w-24 flex-shrink-0">19.00–21.00</span>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-title-md text-title-md text-on-surface truncate">Diskusi Buku Komunitas</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">Lainnya</span>
+<span class="font-body-sm text-body-sm text-secondary truncate">Kopi Titik Temu</span>
+</div>
+</div>
+</div>
+</div>
+<!-- MINGGU (Free Day Empty State) -->
+<div class="day-safe flex items-center justify-between bg-surface-container-low rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-title-md text-title-md">
+            Mg
+          </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Minggu, 27 Okt</span>
+<span class="font-body-sm text-body-sm text-secondary">Tidak ada agenda perkuliahan &amp; organisasi</span>
+</div>
+</div>
+<div class="flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container-high text-on-surface">
+<span class="font-label-sm text-label-sm">🎉 Hari Bebas</span>
+</div>
+</div>
+</section>
+<!-- Visual Matrix Radar Overview Banner / Illustration Card -->
+<div class="relative w-full rounded-2xl overflow-hidden shadow-sm bg-surface-container-lowest">
+<div class="w-full h-36 bg-cover bg-center" data-alt="Minimalist modern university campus students collaborative courtyard in soft daylight, clean architectural lines with blue and slate accents reflecting a tranquil academic planning atmosphere" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCZ9cobaZunOdCVtXGF3Qt6_-2SVtJzZAUw4miFT9pG8PSt8OM0WQob6WWivZM8e1W6n_FHOISe8vhbrbdPc2FEZeOHKhwL1V-TZi3ns7HwLB08LmcRmM4-wwVUCAphcF0qBS5x_tlC7p_fV9fTIVlUBd5iKaTzGRqkdUVJJ6pCKnjltJFHHulfs9Csm_RXQBTjxG_954DRWlBemwGnDKLSOdXq4UsiBVIHJshP1WENQPkfyqaJ3_xj')">
+<div class="w-full h-full bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/70 to-transparent p-space-lg flex flex-col justify-end">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Radar Time-Auditor</span>
+<p class="font-title-md text-title-md text-on-surface mt-0.5">Kombinasi 11 Jadwal Terorganisir</p>
+</div>
+</div>
+</div>
+<!-- Weekly Statistics Summary Bento Card -->
+<section class="flex flex-col bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">query_stats</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface">Statistik Beban Minggu Ini</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Minggu 9</span>
+</div>
+<!-- Bento Grid Stats -->
+<div class="grid grid-cols-3 gap-2">
+<!-- Metric 1: Kuliah -->
+<div class="flex flex-col items-center justify-center p-space-sm bg-surface-container-low rounded-xl text-center">
+<span class="font-headline-sm text-headline-sm text-primary font-bold">18j</span>
+<span class="font-label-sm text-label-sm text-secondary mt-0.5">Kuliah</span>
+<div class="w-full bg-surface-container-highest rounded-full h-1 mt-2">
+<div class="bg-primary h-1 rounded-full w-[75%]"></div>
+</div>
+</div>
+<!-- Metric 2: Organisasi -->
+<div class="flex flex-col items-center justify-center p-space-sm bg-surface-container-low rounded-xl text-center">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">8j</span>
+<span class="font-label-sm text-label-sm text-secondary mt-0.5">Organisasi</span>
+<div class="w-full bg-surface-container-highest rounded-full h-1 mt-2">
+<div class="bg-secondary h-1 rounded-full w-[40%]"></div>
+</div>
+</div>
+<!-- Metric 3: Jam Bentrok -->
+<div class="flex flex-col items-center justify-center p-space-sm bg-error-container rounded-xl text-center">
+<span class="font-headline-sm text-headline-sm text-tertiary font-bold">1j 45m</span>
+<span class="font-label-sm text-label-sm text-tertiary mt-0.5 font-semibold">Bentrok</span>
+<div class="w-full bg-tertiary-fixed-dim rounded-full h-1 mt-2">
+<div class="bg-tertiary h-1 rounded-full w-full"></div>
+</div>
+</div>
+</div>
+<!-- Tactical Recommendation Banner -->
+<div class="flex items-center gap-2.5 p-space-sm bg-surface-container rounded-xl">
+<span class="material-symbols-outlined text-primary text-[20px] flex-shrink-0">lightbulb</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Pindahkan rapat panitia Kamis ke pukul <strong class="text-on-surface">16.00 WIB</strong> untuk menghilangkan total bentrokan akademis Anda.
+        </p>
+</div>
+</section>
+</div>
+<!-- Interactive Floating Resolution Notification Toast -->
+<div class="fixed bottom-20 left-4 right-4 z-40 transition-all duration-300 transform translate-y-24 opacity-0 pointer-events-none" id="toast-resolver">
+<div class="bg-inverse-surface text-inverse-on-surface px-space-lg py-space-md rounded-2xl shadow-xl flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-fixed text-[20px]">sync_problem</span>
+<span class="font-body-sm text-body-sm">Membuka resolusi jadwal <strong id="toast-day-target">Kamis</strong>...</span>
+</div>
+<span class="font-label-sm text-label-sm text-inverse-primary font-bold">Memuat</span>
+</div>
+</div>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.05)]" data-active-classes="text-primary font-bold"><div class="flex items-center justify-around h-16 px-space-xs relative"><a class="flex flex-col items-center justify-center w-14 h-full gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="home" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center w-14 h-full gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="calendar" href="#"><span class="material-symbols-outlined text-[24px]">calendar_month</span><span class="font-label-sm text-label-sm">Calendar</span></a><div class="flex items-center justify-center -mt-5"><a aria-label="Add Schedule" class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-[0_4px_14px_rgba(0,74,198,0.35)] active:scale-95 transition-transform" data-path="add-schedule" href="#"><span class="material-symbols-outlined text-[26px]">add</span></a></div><a aria-current="page" class="flex flex-col items-center justify-center w-14 h-full gap-0.5 transition-all text-primary font-bold" data-path="weekly-overview" href="#"><span class="material-symbols-outlined text-[24px]">view_week</span><span class="font-label-sm text-label-sm">Weekly</span></a><a class="flex flex-col items-center justify-center w-14 h-full gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="profile" href="#"><span class="material-symbols-outlined text-[24px]">account_circle</span><span class="font-label-sm text-label-sm">Profile</span></a></div></nav></body></html>

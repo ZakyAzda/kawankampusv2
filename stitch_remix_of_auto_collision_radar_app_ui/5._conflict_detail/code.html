@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary": "#ffffff", "error-container": "#ffdad6", "inverse-primary": "#b4c5ff", "on-surface": "#131b2e", "primary": "#004ac6", "on-error": "#ffffff", "secondary": "#505f76", "surface": "#faf8ff", "on-primary-fixed-variant": "#003ea8", "on-primary": "#ffffff", "tertiary-container": "#cf2c30", "surface-variant": "#dae2fd", "tertiary-fixed-dim": "#ffb3ad", "tertiary-fixed": "#ffdad7", "surface-container-highest": "#dae2fd", "surface-container-lowest": "#ffffff", "on-surface-variant": "#434655", "primary-container": "#2563eb", "on-secondary-container": "#54647a", "on-secondary": "#ffffff", "surface-bright": "#faf8ff", "secondary-fixed-dim": "#b7c8e1", "surface-container-high": "#e2e7ff", "surface-dim": "#d2d9f4", "secondary-container": "#d0e1fb", "on-primary-container": "#eeefff", "on-tertiary-fixed-variant": "#930013", "error": "#ba1a1a", "on-secondary-fixed": "#0b1c30", "outline-variant": "#c3c6d7", "background": "#faf8ff", "primary-fixed-dim": "#b4c5ff", "on-background": "#131b2e", "surface-container": "#eaedff", "on-tertiary-container": "#ffecea", "primary-fixed": "#dbe1ff", "on-secondary-fixed-variant": "#38485d", "on-primary-fixed": "#00174b", "inverse-on-surface": "#eef0ff", "outline": "#737686", "surface-container-low": "#f2f3ff", "on-tertiary-fixed": "#410004", "tertiary": "#ab0b1c", "inverse-surface": "#283044", "surface-tint": "#0053db", "secondary-fixed": "#d3e4fe", "on-error-container": "#93000a" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter": "0.75rem", "space-xl": "1.5rem", "space-md": "0.75rem", "space-sm": "0.5rem", "space-lg": "1rem", "margin": "1rem", "space-xs": "0.25rem" }, fontFamily: { "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-md": ["Inter"], "label-sm": ["Inter"], "body-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "time-tabular": ["Inter"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, fontSize: { "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.015em", fontWeight: "700" }], "body-lg": ["15px", { lineHeight: "22px", fontWeight: "400" }], "headline-sm": ["17px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "600" }], "body-md": ["13px", { lineHeight: "18px", fontWeight: "400" }], "title-md": ["15px", { lineHeight: "20px", fontWeight: "600" }], "time-tabular": ["13px", { lineHeight: "16px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "700" }] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior:none;font-family:'Plus Jakarta Sans',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-xs"><button aria-label="Go back" class="w-11 h-11 -ml-2 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Auto-Collision Radar Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VaEK6_FmpxxxfVWGa-wjLnbPaNs2BVWoYSR0SkRPK798UZT0WcLzrUJIoaYArwikP3RVyY_EYT88E0h8HjOT-CybAIUDfRiod6mKPk_HY29QIHkII9zFYgr1zH8VHECRP2Q4-exMiA3LV1poe5GZoB0ngpvUYosmnvlUtBdLF0m23LKFrT2aJLYk7kKBZuTBIK3snLYU8v4m0VAkQhnaGWOb4G92AS_bDTNFycrWn8-6HkZiRGwB95RjQ"/><h1 class="font-headline-sm text-headline-sm text-on-surface ml-1">Conflict Detail</h1></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="flex flex-col flex-1 relative w-full pt-16 pb-safe bg-surface"><div class="flex flex-col w-full px-margin pb-space-xl space-y-space-md">
+<div class="flex items-center justify-between pt-space-sm pb-space-xs">
+<div class="flex items-center space-x-space-xs min-w-0">
+<div class="flex items-center space-x-space-xs truncate">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Resolusi Konflik Jadwal</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm shadow-sm flex-shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+      Belum Teratasi
+    </span>
+</div>
+<div class="relative overflow-hidden rounded-xl bg-error-container/60 p-space-md shadow-sm">
+<div class="absolute -right-4 -bottom-4 w-24 h-24 bg-tertiary-container/10 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-start space-x-space-sm relative z-10">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center flex-shrink-0 shadow-sm text-tertiary">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">radar</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-space-xs">
+<span class="font-label-sm text-label-sm text-tertiary uppercase tracking-wider">Peringatan Radar</span>
+<span class="w-1 h-1 rounded-full bg-tertiary"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Kamis, 24 Okt 2024</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface mt-0.5">Bentrokan 2 Agenda Kampus</p>
+<div class="mt-space-sm inline-flex items-center px-2 py-0.5 rounded-lg bg-surface-container-lowest text-tertiary font-label-md text-label-md shadow-sm">
+<span class="material-symbols-outlined text-[16px] mr-1 text-tertiary">timer</span>
+          Total tabrakan: 60 Menit (1 Jam)
+        </div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface">Peta Tabrakan Waktu</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="inline-block w-2 h-2 rounded-full bg-tertiary"></span>
+        Zona Irisan
+      </span>
+</div>
+<div class="relative w-full pt-1 pb-2 select-none">
+<div class="grid grid-cols-3 text-center mb-1 text-on-surface-variant font-time-tabular text-time-tabular">
+<div class="text-left pl-1">13.00</div>
+<div class="text-center font-bold text-tertiary flex items-center justify-center gap-0.5">
+<span>14.00</span>
+<span class="text-on-surface-variant font-normal">→</span>
+<span>15.00</span>
+</div>
+<div class="text-right pr-1">16.00</div>
+</div>
+<div class="relative w-full h-24 bg-surface-container-low rounded-lg p-1.5 flex flex-col justify-between overflow-hidden">
+<div class="absolute inset-y-0 left-1/3 right-1/3 bg-error-container/40 z-0 flex flex-col items-center justify-center">
+<div class="w-full h-full opacity-20" style="background-image: repeating-linear-gradient(45deg, #ba1a1a 0, #ba1a1a 6px, transparent 0, transparent 12px);"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+<span class="material-symbols-outlined text-tertiary text-[20px] animate-bounce" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="bg-tertiary text-on-tertiary font-label-sm text-label-sm px-1.5 py-0.5 rounded-full shadow-sm whitespace-nowrap scale-90">TABRAKAN 14.00-15.00</span>
+</div>
+</div>
+<div class="relative z-10 w-full h-8 flex items-center">
+<div class="w-2/3 h-7 bg-primary rounded-md px-2 flex items-center justify-between text-on-primary shadow-sm">
+<span class="font-label-sm text-label-sm truncate">Kecerdasan Buatan</span>
+<span class="font-time-tabular text-time-tabular opacity-90 text-[10px]">13-15</span>
+</div>
+</div>
+<div class="relative z-10 w-full h-8 flex items-center justify-end">
+<div class="w-2/3 h-7 bg-secondary rounded-md px-2 flex items-center justify-between text-on-secondary shadow-sm">
+<span class="font-label-sm text-label-sm truncate">Rapat Dies Natalis</span>
+<span class="font-time-tabular text-time-tabular opacity-90 text-[10px]">14-16</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2 pt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-primary inline-block"></span>
+          Kuliah Wajib
+        </span>
+<span class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-secondary inline-block"></span>
+          Organisasi
+        </span>
+</div>
+</div>
+</div>
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface">Detail Dua Agenda</span>
+<span class="font-label-sm text-label-sm text-primary">Tinjau Beban</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-xs relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+<div class="flex items-center justify-between pl-1">
+<div class="flex items-center space-x-space-xs">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">Kuliah</span>
+<span class="px-1.5 py-0.5 rounded-md bg-error-container text-on-error-container font-label-sm text-label-sm">Wajib</span>
+</div>
+<span class="font-time-tabular text-time-tabular text-primary font-bold">13.00 – 15.00 WIB</span>
+</div>
+<div class="pl-1 pt-0.5">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Kecerdasan Buatan</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">person</span>
+          Dr. Ir. Hendra, M.T. • Ruang 402 Lab TI
+        </p>
+</div>
+<div class="pl-1 pt-1 flex items-center justify-between">
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-error" style="font-variation-settings: 'FILL' 1;">error</span>
+<span>Presensi minimal 75%</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded-md">
+          Aman: 13.00 - 14.00
+        </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-xs relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-secondary"></div>
+<div class="flex items-center justify-between pl-1">
+<div class="flex items-center space-x-space-xs">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Organisasi</span>
+<span class="px-1.5 py-0.5 rounded-md bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Fleksibel</span>
+</div>
+<span class="font-time-tabular text-time-tabular text-secondary font-bold">14.00 – 16.00 WIB</span>
+</div>
+<div class="pl-1 pt-0.5">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Rapat Panitia Dies Natalis</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">groups</span>
+          Ketua Divisi Acara • Gedung PKM Lt. 2
+        </p>
+</div>
+<div class="pl-1 pt-1 flex items-center justify-between">
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">info</span>
+<span>Bisa dispensasi 1 jam</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded-md">
+          Aman: 15.00 - 16.00
+        </span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-sm space-y-space-sm pt-space-md">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface">Pilihan Resolusi Tindakan</span>
+<span class="font-label-sm text-label-sm text-primary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">auto_fix_high</span>
+        Cerdas
+      </span>
+</div>
+<div class="space-y-space-xs">
+<button class="w-full h-12 bg-primary-container hover:bg-primary active:scale-[0.98] transition-all duration-150 rounded-lg px-space-md flex items-center justify-between text-on-primary-container shadow-sm" id="btn-reschedule">
+<div class="flex items-center space-x-space-sm min-w-0">
+<div class="w-8 h-8 rounded-md bg-surface-container-lowest/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px] text-on-primary">edit_calendar</span>
+</div>
+<div class="text-left min-w-0">
+<p class="font-title-md text-title-md text-on-primary leading-tight truncate">Ubah Jadwal Organisasi</p>
+<p class="font-body-sm text-body-sm text-on-primary-container/80 truncate">Geser ke 15.30 atau cari waktu kosong</p>
+</div>
+</div>
+<span class="bg-surface-container-lowest text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full flex-shrink-0 shadow-sm ml-2">Disarankan</span>
+</button>
+<button class="w-full h-12 bg-surface-container-lowest hover:bg-error-container/40 active:scale-[0.98] transition-all duration-150 rounded-lg px-space-md flex items-center justify-between text-error shadow-sm" id="btn-delete">
+<div class="flex items-center space-x-space-sm">
+<div class="w-8 h-8 rounded-md bg-error-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px] text-on-error-container">delete_sweep</span>
+</div>
+<span class="font-title-md text-title-md text-error">Hapus Salah Satu Jadwal</span>
+</div>
+<span class="material-symbols-outlined text-error text-[20px]">chevron_right</span>
+</button>
+<button class="w-full py-2.5 rounded-lg text-center font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors flex items-center justify-center gap-1.5" id="btn-ignore">
+<span class="material-symbols-outlined text-[18px]">rule_folder</span>
+<span>Abaikan Bentrokan (Tetap Hadir Parsial)</span>
+</button>
+</div>
+</div>
+<div class="fixed bottom-4 left-margin right-margin bg-inverse-surface text-inverse-on-surface p-space-md rounded-xl shadow-lg flex items-center justify-between transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 z-50" id="resolution-toast">
+<div class="flex items-center space-x-space-xs">
+<span class="material-symbols-outlined text-inverse-primary text-[22px]">check_circle</span>
+<span class="font-body-md text-body-md" id="toast-message">Pilihan resolusi tersimpan</span>
+</div>
+<button class="text-inverse-primary font-label-md text-label-md px-2 py-1" onclick="dismissToast()">Tutup</button>
+</div>
+</div>
+<script>
+  function showToast(message) {
+    const toast = document.getElementById('resolution-toast');
+    const msgEl = document.getElementById('toast-message');
+    if (!toast || !msgEl) return;
+    msgEl.innerText = message;
+    toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+    toast.classList.add('translate-y-0', 'opacity-100');
+    setTimeout(() => {
+      dismissToast();
+    }, 3500);
+  }
+
+  function dismissToast() {
+    const toast = document.getElementById('resolution-toast');
+    if (!toast) return;
+    toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+    toast.classList.remove('translate-y-0', 'opacity-100');
+  }
+
+  const btnReschedule = document.getElementById('btn-reschedule');
+  const btnDelete = document.getElementById('btn-delete');
+  const btnIgnore = document.getElementById('btn-ignore');
+
+  if (btnReschedule) {
+    btnReschedule.addEventListener('click', () => {
+      showToast('Membuka rekomendasi slot kosong jam 15.30 WIB...');
+    });
+  }
+
+  if (btnDelete) {
+    btnDelete.addEventListener('click', () => {
+      showToast('Pilih agenda yang ingin dilepas dari kalender');
+    });
+  }
+
+  if (btnIgnore) {
+    btnIgnore.addEventListener('click', () => {
+      showToast('Status bentrokan ditandai sebagai: Hadir Parsial');
+    });
+  }
+</script></main></body></html>

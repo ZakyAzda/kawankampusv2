@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ScheduleItem } from "@/types/schedule";
 
 interface EditScheduleModalProps {
@@ -11,18 +11,34 @@ interface EditScheduleModalProps {
 }
 
 export default function EditScheduleModal({ isOpen, schedule, onClose, onSave }: EditScheduleModalProps) {
-  const [formData, setFormData] = useState<ScheduleItem | null>(null);
-  const [errors, setErrors]     = useState<Record<string, string>>({});
+  if (!isOpen || !schedule) return null;
+
+  return (
+    <EditScheduleDialog
+      key={schedule.id}
+      schedule={schedule}
+      onClose={onClose}
+      onSave={onSave}
+    />
+  );
+}
+
+function EditScheduleDialog({
+  schedule,
+  onClose,
+  onSave,
+}: {
+  schedule: ScheduleItem;
+  onClose: () => void;
+  onSave: (updatedSchedule: ScheduleItem) => void;
+}) {
+  const [formData, setFormData] = useState<ScheduleItem>({ ...schedule });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (schedule) { setFormData({ ...schedule }); setErrors({}); }
-  }, [schedule]);
-
-  if (!isOpen || !formData) return null;
 
   const handleChange = (field: keyof ScheduleItem, value: string | number) => {
-    setFormData((p) => (p ? { ...p, [field]: value } : null));
+    setFormData((p) => ({ ...p, [field]: value }));
     if (errors[field]) setErrors((p) => { const n = { ...p }; delete n[field]; return n; });
   };
 

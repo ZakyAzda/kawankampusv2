@@ -1,42 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { WifiOff, CheckCircle2 } from "lucide-react";
 
+function subscribe(callback: () => void) {
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
+  return () => {
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
+  };
+}
+
+function getSnapshot() {
+  return navigator.onLine;
+}
+
+function getServerSnapshot() {
+  return true;
+}
+
 export default function OfflineIndicator() {
-  const [isOffline, setIsOffline] = useState(false);
+  const isOnline = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [showReconnected, setShowReconnected] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (isOnline) {
+      const handleOnline = () => {
+        setShowReconnected(true);
+        const timer = setTimeout(() => {
+          setShowReconnected(false);
+        }, 4000);
+        return () => clearTimeout(timer);
+      };
 
-    // Check initial status
-    if (!navigator.onLine) {
-      setIsOffline(true);
+      window.addEventListener("online", handleOnline);
+      return () => {
+        window.removeEventListener("online", handleOnline);
+      };
     }
+  }, [isOnline]);
 
-    const handleOffline = () => {
-      setIsOffline(true);
-      setShowReconnected(false);
-    };
-
-    const handleOnline = () => {
-      setIsOffline(false);
-      setShowReconnected(true);
-      const timer = setTimeout(() => {
-        setShowReconnected(false);
-      }, 4000);
-      return () => clearTimeout(timer);
-    };
-
-    window.addEventListener("offline", handleOffline);
-    window.addEventListener("online", handleOnline);
-
-    return () => {
-      window.removeEventListener("offline", handleOffline);
-      window.removeEventListener("online", handleOnline);
-    };
-  }, []);
+  const isOffline = !isOnline;
 
   if (!isOffline && !showReconnected) {
     return null;
@@ -64,3 +69,4 @@ export default function OfflineIndicator() {
     </div>
   );
 }
+
